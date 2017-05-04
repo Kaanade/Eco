@@ -1,0 +1,150 @@
+﻿<Page x:Class="Eco.CreationSysteme"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Eco"
+      mc:Ignorable="d" 
+      d:DesignHeight="1080" d:DesignWidth="1920"
+      Title="CreationSysteme">
+
+    <Page.Resources>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#373737" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border  Background="{TemplateBinding Background}" BorderBrush="Silver" BorderThickness="2" CornerRadius="3,3,3,3">
+                            <Grid>
+                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E59400" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="OrangeRed" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+    </Page.Resources>
+
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" Height="40" >
+            <Rectangle  Grid.Column="0" Grid.Row="0" Grid.RowSpan="50" >
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                        <GradientStop Color="#66B2FF" Offset="0" />
+                        <GradientStop Color="#99CCFF" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Button Width="100" HorizontalAlignment="Left" Click="btnRetour" >Retour</Button>
+            <Button Width="100" HorizontalAlignment="Right" Click="btnClose" >Fermer</Button>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="640" />
+                <ColumnDefinition Width="280" />
+                <ColumnDefinition Width="208" />
+                <ColumnDefinition Width="152" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            
+
+            <Rectangle  Grid.Column="0" Grid.Row="0" Grid.RowSpan="50" >
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                        <GradientStop Color="#99CCFF" Offset="0" />
+                        <GradientStop Color="#CCE5FF" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle  Grid.Column="4" Grid.Row="0" Grid.RowSpan="50">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                        <GradientStop Color="#99CCFF" Offset="0" />
+                        <GradientStop Color="#CCE5FF" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+
+
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="13">
+            </Border>
+
+
+            <Label Grid.Column="1"  Grid.Row="1" Grid.ColumnSpan="4"  FontSize="18" Margin="30">Création du Système</Label>
+
+            <Label Grid.Column="1"   Grid.Row="2" Margin="20,0">Nom système :</Label>
+            <TextBox Grid.Column="2"  Grid.Row="2" ToolTip="Entrez le nom sus système"  Name="txtNomSysteme" Height="23" VerticalAlignment="Top"/>
+
+            <Label Grid.Column="1"   Grid.Row="3" Margin="20,0">Doc système :</Label>
+            <Button Grid.Column="2"  Grid.Row="3" ToolTip="Choisissez un fichier ou dossier pour la documentation du système"    Height="28" VerticalAlignment="Top" Click="btnDocSys">Parcourir...</Button>
+
+            <Label Grid.Column="1"   Grid.Row="4" Margin="20,0">PID système :</Label>
+            <Button Grid.Column="2"  Grid.Row="4" ToolTip="Entrez le nom de l'installation"  Name="btn" Height="28" VerticalAlignment="Top">Parcourir...</Button>
+
+            <Label Grid.Column="1"  Grid.Row="5" Grid.ColumnSpan="4"  FontSize="16" Margin="10">Equipement</Label>
+
+            <Label Grid.Column="1"   Grid.Row="6" Margin="20,0">Nom équipement :</Label>
+            <TextBox Grid.Column="2"  Grid.Row="6" ToolTip="Entrez le nom de l'equipement"  Name="txtMail" Height="23" VerticalAlignment="Top"/>
+
+            <Label Grid.Column="1"   Grid.Row="7" Margin="20,0">Type équipement :</Label>
+            <TextBox Grid.Column="2"  Grid.Row="7" ToolTip="Entrez le nom de l'equipement"  Name="listType" Height="23" VerticalAlignment="Top"/>
+
+            <Label Grid.Column="1"   Grid.Row="8" Margin="20,0">Doc équipement :</Label>
+            <Button Grid.Column="2"  Grid.Row="8" ToolTip="Entrez le nom de l'installation"  Name="txtLogin" Height="28" VerticalAlignment="Top">Parcourir...</Button>
+
+            <Label Grid.Column="1"   Grid.Row="9" Margin="20,0">Fiches types :</Label>
+            <Button Grid.Column="2"  Grid.Row="9" ToolTip="Entrez le nom de l'installation"  Name="btnEquip" Height="28" VerticalAlignment="Top">Parcourir...</Button>
+
+            <Button Grid.Column="1"  Grid.Row="10" ToolTip="Entrez le nom de l'installation"  Name="btnAjoutEquip" Grid.ColumnSpan="3" Width="300"  VerticalAlignment="Center" Margin="233,10,107,9">Ajouter équipement</Button>
+    
+            <StackPanel Grid.Column="1"  Grid.Row="11"  Margin="30,10,10,10"  HorizontalAlignment="Center"  Orientation="Horizontal" Width="240">
+                <Button Name="btnCancel"  IsCancel="True"  Content="Annuler"  Click="btnCancel_Click" Width="100">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Gray" Opacity=".50"  ShadowDepth="8" />
+                    </Button.Effect>
+                </Button>
+                <Button Name="btnLogin"  IsDefault="True"  Content="Valider"    Click="btnValid" Grid.ColumnSpan="2" Width="100">
+                    <Button.Effect>
+                        <DropShadowEffect Color="Gray" Opacity=".50" ShadowDepth="8" />
+                    </Button.Effect>
+                </Button>
+            </StackPanel>
+
+                
+        </Grid>
+    </DockPanel>
+</Page>
