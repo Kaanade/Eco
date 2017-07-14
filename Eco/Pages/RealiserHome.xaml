@@ -50,16 +50,16 @@
         </Grid>
         <Grid x:Name="GridSlideMenu">
 
-            <DataGrid Name="ListProjects" AutoGenerateColumns="False" CanUserAddRows="false">
+            <DataGrid Name="ListSysteme" AutoGenerateColumns="False" CanUserAddRows="false">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Installation" Binding="{Binding nomInstallation}" Width="200"/>
+                    <DataGridTextColumn Header="Système" Binding="{Binding nomSysteme}" Width="200"/>
                 </DataGrid.Columns>
                 <DataGrid.ItemContainerStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Foreground" Value="#000000"/>
                         <Setter Property="Background" Value="#000000"/>
                         <Setter Property="Height" Value="50"/>
-                        <EventSetter Event="MouseLeftButtonUp" Handler="Row_DoubleClick"/>
+                        <EventSetter Event="MouseLeftButtonUp" Handler="Row_Click"/>
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="#FF2626"/>
@@ -86,20 +86,21 @@
 
         </Grid>
         <Grid >
-
-            <ToolBarTray DockPanel.Dock="Top">
-                <ToolBar>
-                    <Label Name="labellLogin"  HorizontalAlignment="Center" ></Label>
-                </ToolBar>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+            
+            <ToolBarTray DockPanel.Dock="Top" Grid.ColumnSpan="2"> 
             </ToolBarTray>
-            <Button VerticalAlignment="Top" HorizontalAlignment="Left" Width="850" Height="560"  Click="btnPid">
+            <Button VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Column="0" Height="560"  Click="btnPid">
                 <Button.Content>
                     <StackPanel>
                         <TextBlock Text="PID" />
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Width="850" Height="560"  Click="btnDoc">
+            <Button VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Column="1"  Height="560"  Click="btnDoc">
                 <StackPanel>
                     <TextBlock Text="Documentation" />
                 </StackPanel>

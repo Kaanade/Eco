@@ -70,18 +70,5 @@ namespace Eco
         }
 
 
-
-
-        //private void btnValid(object sender, RoutedEventArgs e)
-        //{
-
-        
-
-
-
-
-        //}
-
-
     }
 }

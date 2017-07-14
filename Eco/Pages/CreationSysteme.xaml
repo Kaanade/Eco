@@ -110,12 +110,15 @@
             <TextBox Grid.Column="2"  Grid.Row="2" ToolTip="Entrez le nom sus système"  Name="txtNomSysteme" Height="23" VerticalAlignment="Top"/>
 
             <Label Grid.Column="1"   Grid.Row="3" Margin="20,0">Doc système :</Label>
-            <Button Grid.Column="2"  Grid.Row="3" ToolTip="Choisissez un fichier ou dossier pour la documentation du système"    Height="28" VerticalAlignment="Top" Click="btnDocSys">Parcourir...</Button>
+            <TextBox Grid.Column="2"  Grid.Row="3" Name="txtPathDoc" Height="23" VerticalAlignment="Top"/>
+            <Button Grid.Column="3"  Grid.Row="3" ToolTip="Choisissez un fichier ou dossier pour la documentation du système"    Height="28" VerticalAlignment="Top" Click="btnDocSys">Parcourir...</Button>
 
             <Label Grid.Column="1"   Grid.Row="4" Margin="20,0">PID système :</Label>
-            <Button Grid.Column="2"  Grid.Row="4" ToolTip="Entrez le nom de l'installation"  Name="btn" Height="28" VerticalAlignment="Top">Parcourir...</Button>
+            <TextBox Grid.Column="2"  Grid.Row="4" Name="txtPathPID" Height="23" VerticalAlignment="Top"/>
+            <Button Grid.Column="3"  Grid.Row="4" ToolTip="Choisissez un fichier pour le PID du système"  Name="btn" Height="28" VerticalAlignment="Top" Click="btnPidSys">Parcourir...</Button>
+            
 
-            <Label Grid.Column="1"  Grid.Row="5" Grid.ColumnSpan="4"  FontSize="16" Margin="10">Equipement</Label>
+            <!--<Label Grid.Column="1"  Grid.Row="5" Grid.ColumnSpan="4"  FontSize="16" Margin="10">Equipement</Label>
 
             <Label Grid.Column="1"   Grid.Row="6" Margin="20,0">Nom équipement :</Label>
             <TextBox Grid.Column="2"  Grid.Row="6" ToolTip="Entrez le nom de l'equipement"  Name="txtMail" Height="23" VerticalAlignment="Top"/>
@@ -130,7 +133,7 @@
             <Button Grid.Column="2"  Grid.Row="9" ToolTip="Entrez le nom de l'installation"  Name="btnEquip" Height="28" VerticalAlignment="Top">Parcourir...</Button>
 
             <Button Grid.Column="1"  Grid.Row="10" ToolTip="Entrez le nom de l'installation"  Name="btnAjoutEquip" Grid.ColumnSpan="3" Width="300"  VerticalAlignment="Center" Margin="233,10,107,9">Ajouter équipement</Button>
-    
+                -->
             <StackPanel Grid.Column="1"  Grid.Row="11"  Margin="30,10,10,10"  HorizontalAlignment="Center"  Orientation="Horizontal" Width="240">
                 <Button Name="btnCancel"  IsCancel="True"  Content="Annuler"  Click="btnCancel_Click" Width="100">
                     <Button.Effect>

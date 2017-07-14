@@ -22,8 +22,17 @@ namespace Eco
     {
         public MainWindow()
         {
-            InitializeComponent();
-            NavigationFrame.Navigate(new Pid());
+            try
+            {
+
+                InitializeComponent();
+                NavigationFrame.Navigate(new Home());
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message); 
+            }
+            
         }
         
     }

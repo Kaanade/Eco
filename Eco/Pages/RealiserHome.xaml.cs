@@ -25,7 +25,24 @@ namespace Eco
     {
         public RealiserHome()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+
+                string conn = "Data Source=EcoDB.db;Version=3";
+                SQLiteConnection connection = new SQLiteConnection(conn);
+
+                SQLiteCommand cmd = new SQLiteCommand("Select nomSysteme from Systeme", connection);
+                SQLiteDataAdapter adapt = new SQLiteDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                adapt.Fill(ds, "Systemes");
+                ListSysteme.ItemsSource = ds.Tables["Systemes"].DefaultView;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+           
         }
 
         private void btnClose(object sender, RoutedEventArgs e)
@@ -48,20 +65,14 @@ namespace Eco
             //this.NavigationService.Navigate(new Uri("Pages/RealDocumentation.xaml", UriKind.Relative));
         }
 
-        private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        private void Row_Click(object sender, MouseButtonEventArgs e)
         {
-            DataRowView drv = (DataRowView)ListProjects.SelectedItem;
-            String result = (drv["nomInstallation"]).ToString();
-            MessageBoxResult messageBoxResult = MessageBox.Show("Voulez vous sélectionner le projet : " + result + " ?", "Selection Projet", MessageBoxButton.YesNo);
-            if (messageBoxResult == MessageBoxResult.Yes)
-            {
-                MessageBox.Show("Oui");
-                //Properties.Settings.Default.Project = result;
-            }
-            else
-            {
-                MessageBox.Show("Non");
-            }
+            DataRowView drv = (DataRowView)ListSysteme.SelectedItem;
+            String result = (drv["nomSysteme"]).ToString();
+
+            this.NavigationService.Navigate(new Pid(result));
+            
+            
         }
     }
 }

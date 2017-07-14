@@ -17,7 +17,8 @@ using Microsoft.Win32;
 using System.Data;
 using System.Data.SQLite;
 using System.Data.SqlClient;
-using System.IO;
+using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
 
 namespace Eco
 {
@@ -32,6 +33,7 @@ namespace Eco
         private double transformX, transformY, zoom = 1, inczoom = 0;
         public static bool pinning = false;
         private int i = 0;
+        private string systeme;
 
         public bool Pinning
         {
@@ -42,8 +44,15 @@ namespace Eco
         public Pid()
         {
             InitializeComponent();
-            initializeProcedures();
+            //initializeProcedures();
            
+        }
+
+        public Pid(string _nomSysteme)
+        {
+            InitializeComponent();
+            initializeProcedures(_nomSysteme);
+
         }
 
         private void btnClose(object sender, RoutedEventArgs e)
@@ -64,25 +73,37 @@ namespace Eco
 
         private void openPdf(object sender, RoutedEventArgs e)
         {
-            /*string nameBtn = (sender as Button).Content.ToString();
+            string nameBtn = (sender as Button).Content.ToString();
 
             try
             {
                 System.Diagnostics.Process process = new System.Diagnostics.Process();
-                string path = "F:/Travail/Alternance/Exemple/Tests/" + nameBtn+ ".pdf";
-                //string path = AppDomain.CurrentDomain.BaseDirectory + "test.pdf";
+                //string path = "F:/Travail/Alternance/Exemple/Tests/" + nameBtn+ ".pdf";
+                string path = AppDomain.CurrentDomain.BaseDirectory + "/Projets/" + systeme + "/"+ nameBtn + ".pdf";
                 Uri pdf = new Uri(path, UriKind.RelativeOrAbsolute);
                 process.StartInfo.FileName = pdf.LocalPath;
                 process.Start();
                 process.WaitForExit();
+
+                using (var reader = new PdfReader(path))
+                {
+                    var fields = reader.AcroFields.Fields;
+
+                    foreach (var key in fields.Keys)
+                    {
+                        var value = reader.AcroFields.GetField(key);
+                        Console.WriteLine(key + " : " + value);
+                    }
+                }
             }
+
             catch (Exception error)
             {
-                MessageBox.Show("Could not open the file.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }*/
+                MessageBox.Show("Impossible d'ouvrir le fichier.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
 
 
-           
+
         }
 
 
@@ -140,18 +161,15 @@ namespace Eco
          
                 tt.X = 100 + pin.deplacement.X;
                 pin.deplacement.X += 100;
-
-
-                int a = 0;
-
-
+         
             }
         }
 
         private void CanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
             origin = e.GetPosition(this);
-            
+            Console.WriteLine("Y : " + e.GetPosition(this).Y);
+
             if (pinning)
             {
                 pinning = false;
@@ -160,7 +178,7 @@ namespace Eco
 
                 bool creer = modalChoixProc.Creer;
 
-                if(creer)
+                if (creer)
                 {
                     modalChoixProc.Close();
                     ModalProcedure modalProc = new ModalProcedure();
@@ -168,7 +186,7 @@ namespace Eco
 
                     bool valid = modalProc.Valid;
 
-                    if(valid)
+                    if (valid)
                     {
                         if (!Regex.IsMatch(modalProc.NumProc.ToString(), @"^[0-9]+$"))
                         {
@@ -200,6 +218,8 @@ namespace Eco
                                 else
                                 {
                                     modalProc.Close();
+
+                                    File.Copy(@pathPDF, @"Projets/" + systeme + "/" + System.IO.Path.GetFileName(pathPDF));
                                 }
 
                                 connection.Close();
@@ -214,7 +234,7 @@ namespace Eco
                 }
                 else
                 {
-                    
+
                 }
 
                 //addRectangle(origin);
@@ -229,7 +249,7 @@ namespace Eco
         private void CanvasMouseUp(object sender, MouseButtonEventArgs e)
         {
 
-            Vector v = e.GetPosition(this) - origin;
+            System.Windows.Vector v = e.GetPosition(this) - origin;
 
             if (pinning)
             {
@@ -329,9 +349,27 @@ namespace Eco
         }
 
         //Creation forme
-        private void initializeProcedures()
+        private void initializeProcedures(string _nomSysteme)
         {
-            using (SQLiteConnection connect = new SQLiteConnection(@"Data Source=EcoDB.db;Version=3")) ;
+            //string path = System.AppDomain.CurrentDomain.BaseDirectory;
+            systeme = _nomSysteme;
+            
+            SQLiteConnection conn = new SQLiteConnection("Data Source=EcoDB.db;Version=3");
+            conn.Open();
+            
+            var command = conn.CreateCommand();
+
+            //Read from table
+            command.CommandText = "SELECT idPID FROM Systeme WHERE nomSysteme = '@nomSysteme'";
+            command.Parameters.AddWithValue("@nomSysteme", _nomSysteme);
+            SQLiteDataReader sdr = command.ExecuteReader();
+            string idPid = sdr.GetValue(0).ToString();
+
+            //BitmapImage image = new BitmapImage(new Uri("Projets/" + _nomSysteme + "/" + sdr.GetString(0) + ".png", UriKind.Relative));
+            BitmapImage image = new BitmapImage(new Uri("F:/Travail/Alternance/Test/pidTest.png", UriKind.Absolute));
+            myPid.Source = image;
+
+            using (SQLiteConnection connect = new SQLiteConnection(@"Data Source=EcoDB.db;Version=3"));
 
             List<string> ImportedFiles = new List<string>();
             using (SQLiteConnection connect = new SQLiteConnection(@"Data Source=EcoDB.db;Version=3"))
@@ -392,22 +430,7 @@ namespace Eco
             }*/
 
 
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    System.Windows.Controls.Button newBtn = new Button();
-
-            //    newBtn.Content = i.ToString();
-            //    newBtn.Name = "Button" + i.ToString();
-            //    newBtn.Width = 200;
-            //    newBtn.Height = 100;
-            //    newBtn.Padding = new Thickness(2.0);
-            //    newBtn.Margin = new Thickness(2.0);
-
-            //    procGrid.Width = (i + 1) * 200;
-            //    Canvas.SetLeft(newBtn, i * 200);
-
-            //    procGrid.Children.Add(newBtn);
-            //}
+            
         }
         
 

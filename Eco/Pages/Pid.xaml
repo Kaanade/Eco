@@ -72,7 +72,7 @@
 
             <Canvas Width="1700" Height="850" ClipToBounds="True" x:Name="canvasPid" Grid.Row="0" Grid.Column="0">
                 <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray" Canvas.Left="0" >
-                    <Image Source="F:\\Travail\\Alternance\\Test\\pidTest.png" Stretch="UniformToFill" Width="1700" Height="1200" MouseDown="CanvasMouseDown" MouseUp="CanvasMouseUp" MouseWheel="CanvasWheel"/>
+                    <Image Name="myPid" Stretch="UniformToFill" Width="1700" Height="1200" MouseDown="CanvasMouseDown" MouseUp="CanvasMouseUp" MouseWheel="CanvasWheel"/>
                 </local:ZoomBorder>
             </Canvas>
             <Rectangle  Grid.Column="1" Grid.Row="0" >
