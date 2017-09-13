@@ -19,17 +19,18 @@ namespace Eco
     {
         public Point position,origine;
         public Vector deplacement;
-        public int width = 50, height = 50, offsetY = 160;
+        public int width = 40, height = 40, offsetY = 160;
         public string name;
         public double scale;
         public Rectangle rectangle;
+        public Image bodyImage;
 
         public Pin()
         {
 
         }
 
-        public Pin(Point _position)
+        public Pin(Point _position, int signed)
         {
             position = _position;
             position.Y -= offsetY;
@@ -47,7 +48,23 @@ namespace Eco
 
             rectangle.Fill = new SolidColorBrush() { Color = Colors.Red, Opacity = 0.75f };
             rectangle.StrokeThickness = 2;
-            
+
+            string imagePath;
+            if (signed == 1)
+                imagePath = "F:/Travail/Alternance/Exemple/pin_green.png";
+            else
+                imagePath = "F:/Travail/Alternance/Exemple/pin_red.png";
+
+            bodyImage = new Image
+            {
+                Source = new BitmapImage(new Uri(imagePath, UriKind.Absolute)),
+                Width = width,
+                Height = height,
+            };
+
+            Canvas.SetLeft(bodyImage, position.X - 8);
+            Canvas.SetTop(bodyImage, position.Y - height);
+
         }
 
         public Pin(string _name)

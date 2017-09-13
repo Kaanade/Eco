@@ -53,7 +53,15 @@ namespace Eco
 
         private void btnReal(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("Pages/RealiserHome.xaml", UriKind.Relative));
+            ModalRealiserHome modalRealHome = new ModalRealiserHome();
+            modalRealHome.ShowDialog();
+            
+            if (modalRealHome.Valid)
+            {
+                string systeme = modalRealHome.RSysteme;
+                this.NavigationService.Navigate(new Pid(modalRealHome.RSysteme));
+            }
+                
         }
 
         private void OnPropertyChanged(String name)

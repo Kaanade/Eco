@@ -30,6 +30,21 @@ namespace Eco
         public ModalProcedure()
         {
             InitializeComponent();
+            
+            SQLiteConnection conn = new SQLiteConnection("Data Source=EcoDB.db;Version=3");
+            conn.Open();
+            
+            var command = conn.CreateCommand();
+
+            //Read from table
+            command.CommandText = @"SELECT idDocEquipement, titreDocEquipement FROM DocEquipement";
+            SQLiteDataReader sdr = command.ExecuteReader();
+
+            while (sdr.Read())
+            {
+                comboEquipement.Items.Add(sdr[1]);
+            }
+           
         }
 
         public string NomProc
@@ -41,6 +56,18 @@ namespace Eco
         {
             get { return Int32.Parse(txtNumProcedure.Text); }
         }
+
+        public int NumProcPrec
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(txtNumProcedurePrec.Text))
+                    return Int32.Parse(txtNumProcedurePrec.Text);
+                else
+                    return 0;
+            }
+        }
+
         public string pathPDF
         {
             get { return txtPathPDF.Text; }
@@ -49,6 +76,11 @@ namespace Eco
         public bool Valid
         {
             get { return valid; }
+        }
+
+        public string TypeEquipement
+        {
+            get { return comboEquipement.SelectedItem.ToString(); }
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)

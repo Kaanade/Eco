@@ -44,9 +44,15 @@
     </Page.Resources>
 
     <DockPanel>
-        <Grid DockPanel.Dock="Top" Height="40" Background="#3399FF">
-            <Label ></Label>
-            <Button Width="100" HorizontalAlignment="Right" Click="btnClose" >Fermer</Button>
+        <Grid DockPanel.Dock="Top" Height="50" >
+            
+            <Button ToolTip="Fermer l'application" x:Name="button" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose">
+                <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_close}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
         </Grid>
         <Grid >
             <Grid.ColumnDefinitions>

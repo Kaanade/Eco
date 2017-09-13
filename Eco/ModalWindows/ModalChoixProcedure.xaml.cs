@@ -14,9 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
-using System.Data;
-using System.Data.SQLite;
-using System.Data.SqlClient;
 
 namespace Eco
 {
@@ -53,6 +50,7 @@ namespace Eco
         private void btnChoixProc(object sender, EventArgs e)
         {
             choix = true;
+            this.Hide();
         }
     }
 

@@ -75,11 +75,11 @@ namespace Eco
             this.NavigationService.Navigate(new Uri("Pages/Home.xaml", UriKind.Relative));
         }
 
-        private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        private void prepPid(object sender, MouseButtonEventArgs e)
         {
             DataRowView drv = (DataRowView)ListProjects.SelectedItem;
-            String result = (drv["nomInstallation"]).ToString();
-            MessageBoxResult messageBoxResult = MessageBox.Show("Voulez vous sélectionner le projet : " + result + " ?", "Selection Projet", MessageBoxButton.YesNo);
+            string installation = (drv["nomInstallation"]).ToString();
+            /*MessageBoxResult messageBoxResult = MessageBox.Show("Voulez vous sélectionner le projet : " + result + " ?", "Selection Projet", MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 MessageBox.Show("Oui");
@@ -88,7 +88,15 @@ namespace Eco
             else
             {
                 MessageBox.Show("Non");
-            }
+            }*/
+
+            ModalSysteme modalSysteme = new ModalSysteme(installation);
+            modalSysteme.ShowDialog();
+
+            if(modalSysteme.Valid)
+                this.NavigationService.Navigate(new PidPrep(modalSysteme.Systeme));
+
+
         }
 
     }

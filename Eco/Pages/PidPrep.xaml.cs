@@ -19,21 +19,26 @@ using System.Data.SQLite;
 using System.Data.SqlClient;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
-using iTextSharp.text;
+using System.Data.OleDb;
 
 namespace Eco
 {
     /// <summary>
-    /// Logique d'interaction pour Pid.xaml
+    /// Logique d'interaction pour PidPrep.xaml
     /// </summary>
-    public partial class Pid : Page
+    public partial class PidPrep : Page
     {
+        public PidPrep(string _nomSysteme)
+        {
+            InitializeComponent();
+            initializeProcedures(_nomSysteme);
+        }
+
         private UIElement child = null;
         private Point origin, last, newPos;
         private List<Pin> vecPin = new List<Pin>();
         private double transformX, transformY, zoom = 1, inczoom = 0;
         public static bool pinning = false;
-        List<string> listProc { get; set; }
 
         private string systeme;
 
@@ -43,19 +48,7 @@ namespace Eco
             set { pinning = value; }
         }
 
-        public Pid()
-        {
-            InitializeComponent();
-            //initializeProcedures();
-           
-        }
-
-        public Pid(string _nomSysteme)
-        {
-            InitializeComponent();
-            initializeProcedures(_nomSysteme);
-
-        }
+        
 
         private void btnClose(object sender, RoutedEventArgs e)
         {
@@ -64,7 +57,7 @@ namespace Eco
 
         private void btnRetour(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("Pages/RealiserHome.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("Pages/PreparerHome.xaml", UriKind.Relative));
         }
 
         private void btnAddPin(object sender, RoutedEventArgs e)
@@ -73,63 +66,107 @@ namespace Eco
             pinning = true;
         }
 
-        private void btnSeeFNC (object sender, RoutedEventArgs e)
+
+        private void btnImportProc(object sender, RoutedEventArgs e)
         {
-            modalListFNC modalListFNC = new modalListFNC(systeme);
-            modalListFNC.ShowDialog();
+            string excelPath = "F:/Travail/Alternance/Test/Template_Procedure.xlsx";
+            OleDbConnection Conn;
+            OleDbCommand Cmd;
+            int a = 0;
 
-        }
+            string impSysteme, impNomProc;
 
-        private void btnExport(object sender, RoutedEventArgs e)
-        {
-            List<string> pdf = new List<string>();
-            pdf.Add("C:/Users/Matthieu/Documents/Visual Studio 2015/Projects/Eco/Eco/bin/Debug/Projets/Test3/excelTestProc8/excelTestProc8.pdf");
-            pdf.Add("C:/Users/Matthieu/Documents/Visual Studio 2015/Projects/Eco/Eco/bin/Debug/Projets/Test3/excelTestProc9/excelTestProc9.pdf");
+            string conn = "Data Source=EcoDB.db;Version=3";
+            SQLiteConnection connection = new SQLiteConnection(conn);
+            connection.Open();
+            SQLiteCommand cmdIns,cmd2,cmd3,cmd4;
 
-            byte[] mergedPdf = null;
-            using (MemoryStream ms = new MemoryStream())
+            string excelConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + excelPath + ";Extended Properties=Excel 12.0;Persist Security Info=True";
+            Conn = new OleDbConnection(excelConnectionString);
+
+            Conn.Open();
+            Cmd = new OleDbCommand();
+            Cmd.Connection = Conn;
+            Cmd.CommandText = "Select * from [Procedures$]";
+            var Reader = Cmd.ExecuteReader();
+            while (Reader.Read())
             {
-                using (Document document = new Document())
+                if (Reader["systeme"].ToString() == "")
+                    continue;
+
+                
+                
+                cmdIns = new SQLiteCommand("INSERT INTO Procedure (nomProcedure, systeme, numProcedure, typeEquipement) VALUES (@nomProcedure,@systeme, @numProcedure, @typeEquipement)", connection);
+                cmdIns.Parameters.AddWithValue("@nomProcedure", Reader["nomProcedure"].ToString());
+                cmdIns.Parameters.AddWithValue("@systeme", Reader["systeme"].ToString());
+                cmdIns.Parameters.AddWithValue("@numProcedure", Convert.ToInt32(Reader["numProcedure"]));
+                cmdIns.Parameters.AddWithValue("@typeEquipement", Reader["typeEquipement"].ToString());
+
+                cmd2 = new SQLiteCommand("INSERT INTO refDoc (typeDoc, nomProcedure, nomDoc, systeme) VALUES ('Equipement', @nomProcedure, @nomDoc, @systeme)", connection);
+                cmd2.Parameters.AddWithValue("@nomProcedure", Reader["nomProcedure"].ToString());
+                cmd2.Parameters.AddWithValue("@nomDoc", Reader["typeEquipement"].ToString());
+                cmd2.Parameters.AddWithValue("@systeme", systeme);
+
+                cmd3 = new SQLiteCommand("INSERT INTO refFT (nomProcedure, systeme) VALUES (@nomProcedure, @systeme)", connection);
+                cmd3.Parameters.AddWithValue("@nomProcedure", Reader["nomProcedure"].ToString());
+                cmd3.Parameters.AddWithValue("@systeme", systeme);
+
+                cmd4 = new SQLiteCommand("INSERT INTO " + Regex.Replace(Reader["typeEquipement"].ToString(), @"\s+", "") + " (nomProcedure, systeme) VALUES (@nomProcedure, @systeme)", connection);
+                cmd4.Parameters.AddWithValue("@nomProcedure", Reader["nomProcedure"].ToString());
+                cmd4.Parameters.AddWithValue("@systeme", systeme);
+
+                cmdIns.ExecuteNonQuery();
+                cmd2.ExecuteNonQuery();
+                cmd3.ExecuteNonQuery();
+                cmd4.ExecuteNonQuery();
+
+
+
+
+                string pathTemplate = AppDomain.CurrentDomain.BaseDirectory + "Doc/FT/FT-" + Reader["typeEquipement"].ToString() + ".pdf";
+                string pathProc = AppDomain.CurrentDomain.BaseDirectory + "Projets/" + systeme + "/" + Reader["nomProcedure"].ToString();
+                // Determine whether the directory exists.
+                if (!Directory.Exists(pathProc))
                 {
-                    using (PdfCopy copy = new PdfCopy(document, ms))
-                    {
-                        document.Open();
-
-                        for (int i = 0; i < pdf.Count; ++i)
-                        {
-                            string pathTemp = AppDomain.CurrentDomain.BaseDirectory + "Temp/tempMerge.pdf";
-                            PdfReader reader = new PdfReader(pdf[i]);
-                            PdfStamper pdfStamper = new PdfStamper(reader, new FileStream(pathTemp, FileMode.Create));
-                            pdfStamper.FormFlattening = true;
-                            pdfStamper.Close();
-                            reader.Close();
-
-                            PdfReader reader2 = new PdfReader(pathTemp);
-                            
-                            // loop over the pages in that document
-                            int n = reader.NumberOfPages;
-                            for (int page = 0; page < n;)
-                            {
-                                copy.AddPage(copy.GetImportedPage(reader2, ++page));
-                            }
-                            reader2.Close();
-                            File.Delete(pathTemp);
-
-
-                        }
-                    }
+                    // Try to create the directory.
+                    DirectoryInfo di = Directory.CreateDirectory(pathProc);
                 }
-                mergedPdf = ms.ToArray();
-                File.WriteAllBytes(@"F:/Travail/Alternance/Test/MyFileName.pdf", mergedPdf);
+
+                pathProc += "/" + Reader["nomProcedure"].ToString() + ".pdf";
+
+                if (Reader["typeEquipement"].ToString() == "Moteur MT")
+                {
+                    PdfReader pdfReader = new PdfReader(pathTemplate);
+                    PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(pathProc, FileMode.Create));
+                    AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+                    pdfFormFields.SetField("puissance", Reader["Puissance"].ToString());
+                    pdfFormFields.SetField("vitesse", Reader["Vitesse"].ToString());
+                    pdfFormFields.SetField("Site", Reader["Site"].ToString());
+                    pdfFormFields.SetField("TrancheUnite", Reader["TrancheUnite"].ToString());
+                    pdfFormFields.SetField("SystemeElementaire", Reader["SystemeElementaire"].ToString());
+                    pdfFormFields.SetField("codeEquipement", Reader["codeEquipement"].ToString());
+                    pdfStamper.Close();
+                }
+                else
+                {
+                    File.Copy(pathTemplate, pathProc);
+                }
+
+                
+                
+
+
             }
+            Reader.Close();
+            Conn.Close();
 
+            MessageBox.Show("Importation Réussie");
         }
-
-
 
         private void openPdf(object sender, RoutedEventArgs e)
         {
-            string nomProcedure = (sender as Button).Tag.ToString();
+            string nomProcedure = (sender as Button).Content.ToString();
             double nbAvancement = 0, nbFields = 0;
 
             ModalForm modalForm = new ModalForm(nomProcedure, systeme);
@@ -157,28 +194,24 @@ namespace Eco
                     process.Start();
                     process.WaitForExit();
 
-                    
+
 
                     using (var reader = new PdfReader(path))
                     {
                         var fields = reader.AcroFields.Fields;
                         bool refFt = false;
 
-                        
-
-                        SQLiteCommand cmdRead = new SQLiteCommand("PRAGMA table_info(refFT)", connection);
-                        SQLiteDataReader sdrRead = cmdRead.ExecuteReader();
-
                         foreach (var key in fields.Keys)
                         {
                             var value = reader.AcroFields.GetField(key);
-                            
-                            
+
+                            SQLiteCommand cmdRead = new SQLiteCommand("PRAGMA table_info(refFT)", connection);
+                            SQLiteDataReader sdrRead = cmdRead.ExecuteReader();
 
 
                             while (sdrRead.Read())
                             {
-                                if(sdrRead[1].ToString() == key)
+                                if (sdrRead[1].ToString() == key)
                                 {
                                     refFt = true;
                                     break;
@@ -200,8 +233,8 @@ namespace Eco
                                 nbFields++;
                                 cmd = new SQLiteCommand("UPDATE MoteurMT SET " + key + " = @value WHERE nomProcedure = @nomProcedure AND systeme = @systeme", connection);
                             }
-                            
-                            
+
+
                             cmd.Parameters.AddWithValue("@value", value);
                             cmd.Parameters.AddWithValue("@nomProcedure", nomProcedure);
                             cmd.Parameters.AddWithValue("@systeme", systeme);
@@ -236,7 +269,7 @@ namespace Eco
                         int b = cmd2.ExecuteNonQuery();
 
                     }
-                    
+
                 }
 
                 catch (Exception error)
@@ -252,7 +285,7 @@ namespace Eco
                 ModalSign modalSign = new ModalSign(path);
                 modalSign.ShowDialog();
 
-                if(modalSign.Valid)
+                if (modalSign.Valid)
                 {
                     SQLiteCommand cmd = new SQLiteCommand("UPDATE Procedure SET  signed = 1 WHERE nomProcedure = @nomProcedure", connection);
                     cmd.Parameters.AddWithValue("@nomProcedure", nomProcedure);
@@ -272,7 +305,7 @@ namespace Eco
             }
             else if (fncm)
             {
-                
+
 
                 modalForm.Close();
                 ModalFNC modalFNC = new ModalFNC();
@@ -306,7 +339,7 @@ namespace Eco
                         {
                             string path = AppDomain.CurrentDomain.BaseDirectory + "/Projets/" + systeme + "/" + nomProcedure + "/" + nomFNC;
                             MessageBox.Show("FNC enregistrée");
-                            
+
                             File.Copy(modalFNC.pathPDF, path + ".png");
 
                         }
@@ -330,10 +363,10 @@ namespace Eco
 
                 string document = modalDoc.Doc;
                 string typeDoc = modalDoc.TypeDoc;
-                
+
                 var command = connection.CreateCommand();
 
-                
+
 
                 if (typeDoc == "Equipement")
                 {
@@ -350,19 +383,19 @@ namespace Eco
                         break;
                     }
 
-                   path = AppDomain.CurrentDomain.BaseDirectory + "/Doc/Equipement/" + urlDoc;
-                    
+                    path = AppDomain.CurrentDomain.BaseDirectory + "/Doc/Equipement/" + urlDoc;
+
                 }
                 else
                 {
 
                 }
 
-               System.Diagnostics.Process process = new System.Diagnostics.Process();
-               Uri docPath = new Uri(path, UriKind.RelativeOrAbsolute);
-               process.StartInfo.FileName = docPath.LocalPath;
-               process.Start();
-               process.WaitForExit();
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                Uri docPath = new Uri(path, UriKind.RelativeOrAbsolute);
+                process.StartInfo.FileName = docPath.LocalPath;
+                process.Start();
+                process.WaitForExit();
 
 
             }
@@ -374,7 +407,7 @@ namespace Eco
 
         }
 
-        
+
         private void CanvasMouseDown(object sender, MouseButtonEventArgs e)
         {
             origin = e.GetPosition(this);
@@ -387,6 +420,11 @@ namespace Eco
                 modalChoixProc.ShowDialog();
 
                 bool creer = modalChoixProc.Creer;
+                bool choix = modalChoixProc.Choix;
+
+                string conn = "Data Source=EcoDB.db;Version=3";
+                SQLiteConnection connection = new SQLiteConnection(conn);
+                connection.Open();
 
                 if (creer)
                 {
@@ -407,13 +445,11 @@ namespace Eco
                             string nomProcedure = modalProc.NomProc;
                             int numProcedure = modalProc.NumProc;
                             int numProcedurePrec = modalProc.NumProcPrec;
-                            string pathPDF = modalProc.pathPDF;
                             string typeEquipement = modalProc.TypeEquipement;
-                            string path = AppDomain.CurrentDomain.BaseDirectory + "Projets/" + systeme + "/" + nomProcedure ;
+                            string pathPDF = AppDomain.CurrentDomain.BaseDirectory + "Doc/FT/FT-" + typeEquipement +".pdf";
+                            string path = AppDomain.CurrentDomain.BaseDirectory + "Projets/" + systeme + "/" + nomProcedure;
 
-                            string conn = "Data Source=EcoDB.db;Version=3";
-                            SQLiteConnection connection = new SQLiteConnection(conn);
-                            connection.Open();
+                            
                             SQLiteCommand cmd = new SQLiteCommand("INSERT INTO Procedure (nomProcedure,systeme, numProcedure, posX, posY, numProcedurePrec, typeEquipement) VALUES (@nomProcedure, @systeme, @numProcedure,  @posX, @posY, @numProcedurePrec, @typeEquipement)", connection);
                             cmd.Parameters.AddWithValue("@nomProcedure", nomProcedure);
                             cmd.Parameters.AddWithValue("@systeme", systeme);
@@ -432,7 +468,7 @@ namespace Eco
                             cmd3.Parameters.AddWithValue("@nomProcedure", nomProcedure);
                             cmd3.Parameters.AddWithValue("@systeme", systeme);
 
-                            SQLiteCommand cmd4 = new SQLiteCommand("INSERT INTO "+ Regex.Replace(typeEquipement, @"\s+", "") + " (nomProcedure, systeme) VALUES (@nomProcedure, @systeme)", connection);
+                            SQLiteCommand cmd4 = new SQLiteCommand("INSERT INTO " + Regex.Replace(typeEquipement, @"\s+", "") + " (nomProcedure, systeme) VALUES (@nomProcedure, @systeme)", connection);
                             cmd4.Parameters.AddWithValue("@nomProcedure", nomProcedure);
                             cmd4.Parameters.AddWithValue("@systeme", systeme);
 
@@ -480,17 +516,33 @@ namespace Eco
                         }
                     }
                 }
-                else
+                else if(choix)
                 {
+                    ModalPlacePin modalPlacePin = new ModalPlacePin(systeme);
+                    modalPlacePin.ShowDialog();
+                    
+                    if(modalPlacePin.Valid)
+                    {
+                        SQLiteCommand cmd = new SQLiteCommand("UPDATE Procedure  SET  posX = @posX, posY = @posY WHERE nomProcedure = @nomProcedure AND systeme = @systeme", connection);
+                        cmd.Parameters.AddWithValue("@posX", origin.X);
+                        cmd.Parameters.AddWithValue("@posY", origin.Y);
+                        cmd.Parameters.AddWithValue("@nomProcedure", modalPlacePin.NomProcedure);
+                        cmd.Parameters.AddWithValue("@systeme", systeme);
+                        
+
+                        cmd.ExecuteNonQuery();
+
+                        this.NavigationService.Navigate(new Pid(systeme));
+                    }
 
                 }
-                
-                
-            }
-            else if(!pinning)
-                    border.Pinning = false;
 
-            
+
+            }
+            else if (!pinning)
+                border.Pinning = false;
+
+
         }
 
         private void CanvasMouseUp(object sender, MouseButtonEventArgs e)
@@ -501,7 +553,7 @@ namespace Eco
             if (pinning)
             {
                 pinning = false;
-               // border.Pinning = false;
+                // border.Pinning = false;
             }
             else
             {
@@ -523,25 +575,25 @@ namespace Eco
 
                     }
                 }
-                   
+
             }
-            
+
         }
 
         //Zoom 
         private void CanvasWheel(object sender, MouseWheelEventArgs e)
         {
-            
+
 
             double zoom = e.Delta > 0 ? 0.2 : -0.2;
             inczoom += zoom;
-            Console.WriteLine("Zoom : " + Math.Round(inczoom,2));
+            Console.WriteLine("Zoom : " + Math.Round(inczoom, 2));
             Point relative = e.GetPosition(child);
             relative.Y -= 160;
 
             if (inczoom < 0.1 && inczoom > -0.1)
             {
-                
+
                 foreach (Pin pin in vecPin)
                 {
                     pin.bodyImage.Visibility = Visibility.Visible;
@@ -552,11 +604,11 @@ namespace Eco
             {
                 foreach (Pin pin in vecPin)
                 {
-                        pin.bodyImage.Visibility = Visibility.Collapsed;
-                    
+                    pin.bodyImage.Visibility = Visibility.Collapsed;
+
                 }
             }
-             
+
 
             //foreach (Pin pin in vecPin)
             //{
@@ -620,13 +672,10 @@ namespace Eco
             systeme = _nomSysteme;
             labelSysteme.Content = systeme;
             double i = 0;
-            BitmapImage carBitmap = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Images/logo_tes2.png", UriKind.Absolute));
-            imgLogo.Source = carBitmap;
 
-            listProc = new List<string>();
             SQLiteConnection conn = new SQLiteConnection(@"Data Source=EcoDB.db;Version=3");
             conn.Open();
-            
+
             var command = conn.CreateCommand();
 
             //Read from table
@@ -640,40 +689,42 @@ namespace Eco
             }
             sdr.Close();
             
-            
-            double avancementTotal = 0;
-            string avancementSysteme = "";
 
-           
             BitmapImage image = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Projets/" + _nomSysteme + "/" + idPid + ".png", UriKind.Absolute));
             myPid.Source = image;
             SQLiteConnection connect = new SQLiteConnection(@"Data Source=EcoDB.db;Version=3");
             var fmd = connect.CreateCommand();
             connect.Open();
-                
+
             fmd.CommandText = @"SELECT nomProcedure, posX, posY, signed, avancement FROM Procedure WHERE systeme = @systeme";
             fmd.Parameters.AddWithValue("@systeme", systeme);
-
             SQLiteDataReader r = fmd.ExecuteReader();
             while (r.Read())
             {
 
                 i++;
                 string name = System.IO.Path.GetFileNameWithoutExtension(Convert.ToString(r["nomProcedure"]));
-                listProc.Add(name);
 
-                addRectangle(new Point( Convert.ToInt16(r["posX"]), Convert.ToInt16(r["posY"])), Convert.ToInt16(r["signed"]));
+                Button newBtn = new Button();
+                newBtn.Content = name;
+                newBtn.Name = "btn" + i.ToString();
+                newBtn.Click += openPdf;
+                newBtn.Width = 200;
+                newBtn.Height = 100;
+                newBtn.Padding = new Thickness(2.0);
+                newBtn.Margin = new Thickness(2.0);
 
-                avancementTotal += Convert.ToDouble(r["avancement"]);
+                Canvas.SetLeft(newBtn, (i - 1) * 200);
+                procGrid.Children.Add(newBtn);
+
+                if(Convert.ToInt16(r["posX"]) != 0 || Convert.ToInt16(r["posY"]) != 0)
+                    addRectangle(new Point(Convert.ToInt16(r["posX"]), Convert.ToInt16(r["posY"])), Convert.ToInt16(r["signed"]));
+                
             }
 
-            templ.ItemsSource = listProc;
-
-            labelAvancementSysteme.Content = "Avancement : [" + Convert.ToString(Math.Round((avancementTotal / i))) + "%]";
-            progressBarAvSys.Value = Math.Round((avancementTotal / i));
-
+            
         }
-        
+
 
         private ScaleTransform GetScaleTransform(UIElement element)
         {
@@ -686,3 +737,4 @@ namespace Eco
         }
     }
 }
+

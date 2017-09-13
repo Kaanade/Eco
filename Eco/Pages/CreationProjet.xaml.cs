@@ -29,6 +29,16 @@ namespace Eco
             InitializeComponent();
         }
 
+        private void btnClose(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void btnRetour(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("Pages/PreparerHome.xaml", UriKind.Relative));
+        }
+
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult messageBoxResult = MessageBox.Show("Voulez vous annuler la création du projet ? ","Annuler Projet", MessageBoxButton.YesNo);

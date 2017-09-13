@@ -15,6 +15,7 @@ namespace Eco
         private Point origin;
         private Point start;
         private  bool pinning = false;
+        private double inczoom;
 
         public bool Pinning
         {
@@ -94,18 +95,29 @@ namespace Eco
                 if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
                     return;
 
-                Point relative = e.GetPosition(child);
-                double abosuluteX;
-                double abosuluteY;
+                inczoom += zoom;
 
-                abosuluteX = relative.X * st.ScaleX + tt.X;
-                abosuluteY = relative.Y * st.ScaleY + tt.Y;
+                if (inczoom < 0.1 && inczoom > -0.1)
+                {
+                    this.Reset();
+                }
+                else
+                {
+                    Point relative = e.GetPosition(child);
+                    double abosuluteX;
+                    double abosuluteY;
 
-                st.ScaleX += zoom;
-                st.ScaleY += zoom;
+                    abosuluteX = relative.X * st.ScaleX + tt.X;
+                    abosuluteY = relative.Y * st.ScaleY + tt.Y;
 
-                tt.X = abosuluteX - relative.X * st.ScaleX;
-                tt.Y = abosuluteY - relative.Y * st.ScaleY;
+                    st.ScaleX += zoom;
+                    st.ScaleY += zoom;
+
+                    tt.X = abosuluteX - relative.X * st.ScaleX;
+                    tt.Y = abosuluteY - relative.Y * st.ScaleY;
+                }
+
+               
             }
         }
 
@@ -138,7 +150,7 @@ namespace Eco
 
         void child_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.Reset();
+            //this.Reset();
         }
 
         private void child_MouseMove(object sender, MouseEventArgs e)
