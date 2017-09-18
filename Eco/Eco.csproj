@@ -143,6 +143,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.105.2\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
       <Private>True</Private>
@@ -167,15 +168,26 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFCustomMessageBox, Version=1.0.7.39267, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFCustomMessageBox.1.0.7\lib\WPFCustomMessageBox.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\CurrentConfig.cs" />
     <Compile Include="Classes\Pin.cs" />
     <Compile Include="Classes\Procedure.cs" />
     <Compile Include="Classes\Zoomborder.cs" />
+    <Compile Include="ModalWindows\ModalFormPrep.xaml.cs">
+      <DependentUpon>ModalFormPrep.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ModalWindows\ModalPassPrec.xaml.cs">
+      <DependentUpon>ModalPassPrec.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ModalWindows\ModalRealiserHome.xaml.cs">
       <DependentUpon>ModalRealiserHome.xaml</DependentUpon>
     </Compile>
@@ -231,6 +243,14 @@
     <Compile Include="Pages\RealiserHome.xaml.cs">
       <DependentUpon>RealiserHome.xaml</DependentUpon>
     </Compile>
+    <Page Include="ModalWindows\ModalFormPrep.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ModalWindows\ModalPassPrec.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ModalWindows\ModalRealiserHome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

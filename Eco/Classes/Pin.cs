@@ -51,9 +51,9 @@ namespace Eco
 
             string imagePath;
             if (signed == 1)
-                imagePath = "F:/Travail/Alternance/Exemple/pin_green.png";
+                imagePath = AppDomain.CurrentDomain.BaseDirectory + "Images/pin_green.png";
             else
-                imagePath = "F:/Travail/Alternance/Exemple/pin_red.png";
+                imagePath = AppDomain.CurrentDomain.BaseDirectory + "Images/pin_red.png";
 
             bodyImage = new Image
             {

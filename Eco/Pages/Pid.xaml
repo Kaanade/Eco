@@ -11,7 +11,7 @@
     <Page.Resources>
         <DataTemplate x:Key="dataTempl">
 
-            <Button Height="100" Tag="{Binding}" Width="200" Click="openPdf"  Margin="1">
+            <Button Height="70" Tag="{Binding}" Width="200" Click="openPdf"  Margin="1">
                     <StackPanel>
                         <Label Content="{Binding}" FontSize="16" ></Label>
                     </StackPanel>
@@ -24,20 +24,22 @@
         
         <Grid DockPanel.Dock="Top"  >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1920"/>
+                <ColumnDefinition Width="85*"/>
+                <ColumnDefinition Width="15*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Border BorderThickness="0 0 0 1" Grid.Row="0">
                 
             </Border>
 
-            <Label Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Name="labelAvancementSysteme" Margin="300,10" ></Label>
-            <ProgressBar Width="100" HorizontalAlignment="Left" Name="progressBarAvSys" Margin="440,0"/>
+            <Label Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Name="labelAvancementSysteme" Margin="100,10" ></Label>
+            <ProgressBar Width="100" HorizontalAlignment="Left" Name="progressBarAvSys" Margin="240,0"/>
             <Label Width="100" HorizontalAlignment="Center" Name="labelSysteme"  FontSize="16"></Label>
-            <Image  Name="imgLogo" HorizontalAlignment="Right"  Width="200" Margin="300,0"/>
+            <Image  Name="imgLogo" HorizontalAlignment="Right"  Width="200"/>
 
             <Button Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Left" Height="50" Width="50"  Click="btnRetour" >
                 <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
@@ -47,7 +49,7 @@
                 </Rectangle>
             </Button>
 
-            <Button ToolTip="Fermer l'application" x:Name="button" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose">
+            <Button ToolTip="Fermer l'application" x:Name="button" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose" Grid.Column="1">
                 <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_close}" />
@@ -55,35 +57,23 @@
                 </Rectangle>
             </Button>
             
-            <Button Width="220" Height="100" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Click="btnAddPin" VerticalAlignment="Top" >Ajouter Procédure</Button>
-            <Button Width="220" Height="100" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="220,0" Click="btnExport" >Exporter FT</Button>
-            <Button Width="220" Height="100" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="440,0" Click="btnSeeFNC" >Voir FNC</Button>
-        </Grid>
-        
-       
-        <Grid DockPanel.Dock="Left" VerticalAlignment="Top" HorizontalAlignment="Left" Height="920" x:Name="pidGrid" >
-            
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1700"/>
-                <ColumnDefinition Width="220"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="920"/>
-            </Grid.RowDefinitions>
+            <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Click="btnAddPin" VerticalAlignment="Top" >Ajouter Procédure</Button>
+            <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="220,0" Click="btnExport" >Exporter FT</Button>
+            <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="440,0" Click="btnSeeFNC" >Voir FNC</Button>
 
-            <Canvas Width="1700" Height="910" ClipToBounds="True" x:Name="canvasPid" Grid.Row="0" Grid.Column="0">
+            <Canvas  ClipToBounds="True" x:Name="canvasPid" Grid.Row="3" Grid.Column="0" Width="1720" Height="970" >
                 <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray" Canvas.Left="0" >
-                    <Image Name="myPid" Stretch="UniformToFill" Width="1700" Height="1200" MouseDown="CanvasMouseDown" MouseUp="CanvasMouseUp" MouseWheel="CanvasWheel"/>
+                    <Image Name="myPid" Stretch="UniformToFill"   MouseDown="CanvasMouseDown" MouseUp="CanvasMouseUp" MouseWheel="CanvasWheel"/>
                 </local:ZoomBorder>
             </Canvas>
 
             <RepeatButton x:Name="LineRightButton" 
                     Grid.Column="1"
-                    Grid.Row="0"
+                    Grid.Row="3"
                     Content="&gt;" 
                     Command="{x:Static ScrollBar.LineRightCommand}"      
                     CommandTarget="{Binding ElementName=scrollViewerActive}"/>
-            <ScrollViewer Name="ScrollListProc" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Grid.Row="0" Grid.Column="1" CanContentScroll="True">
+            <ScrollViewer Name="ScrollListProc" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Grid.Row="3" Grid.Column="1" CanContentScroll="True">
                 <ItemsControl Name="templ" ItemsSource="{Binding listProc}" ItemTemplate="{StaticResource dataTempl}" >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -92,10 +82,8 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
-
-            
         </Grid>
-        
-        
-    </DockPanel>
+
+
+        </DockPanel>
 </Page>

@@ -8,10 +8,39 @@
       d:DesignHeight="1080" d:DesignWidth="1920"
       Title="PidPrep">
 
-    
+    <Page.Resources>
+        <DataTemplate x:Key="dataTempl">
+
+            <Button Height="70" Tag="{Binding}" Width="200" Click="openPdf"  Margin="1">
+                <StackPanel>
+                    <Label Content="{Binding}" FontSize="16" ></Label>
+                </StackPanel>
+            </Button>
+
+        </DataTemplate>
+    </Page.Resources>
+
     <DockPanel>
-        <Grid DockPanel.Dock="Top" Height="50" >
-            <Label Width="100" HorizontalAlignment="Left" Name="labelSysteme" Margin="600,0"></Label>
+
+        <Grid DockPanel.Dock="Top"  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="85*"/>
+                <ColumnDefinition Width="15*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Border BorderThickness="0 0 0 1" Grid.Row="0">
+
+            </Border>
+
+            <Label Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Name="labelAvancementSysteme" Margin="100,10" ></Label>
+            <ProgressBar Width="100" HorizontalAlignment="Left" Name="progressBarAvSys" Margin="240,0"/>
+            <Label Width="100" HorizontalAlignment="Center" Name="labelSysteme"  FontSize="16"></Label>
+            <Image  Name="imgLogo" HorizontalAlignment="Right"  Width="200"/>
+
             <Button Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Left" Height="50" Width="50"  Click="btnRetour" >
                 <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
@@ -20,46 +49,38 @@
                 </Rectangle>
             </Button>
 
-            <Button ToolTip="Fermer l'application" x:Name="button" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose">
+            <Button ToolTip="Fermer l'application" x:Name="button" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose" Grid.Column="1">
                 <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_close}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-        </Grid>
-        <Grid DockPanel.Dock="Top" Height="120" Background="Beige" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
 
-            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible">
-                <Canvas x:Name="procGrid">
+            <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Click="btnAddPin" VerticalAlignment="Top" >Ajouter Procédure</Button>
+            <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="220,0" Click="btnImportProc" >Importer Procédures</Button>
 
-
-                </Canvas>
-            </ScrollViewer>
-        </Grid>
-
-        <Grid DockPanel.Dock="Left" VerticalAlignment="Top" HorizontalAlignment="Left" Height="920" x:Name="pidGrid" >
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1700"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="850"/>
-                <RowDefinition Height="70"/>
-            </Grid.RowDefinitions>
-
-            <Canvas Width="1700" Height="850" ClipToBounds="True" x:Name="canvasPid" Grid.Row="0" Grid.Column="0">
+            <Canvas  ClipToBounds="True" x:Name="canvasPid" Grid.Row="3" Grid.Column="0" Width="1720" Height="920" >
                 <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray" Canvas.Left="0" >
-                    <Image Name="myPid" Stretch="UniformToFill" Width="1700" Height="1200" MouseDown="CanvasMouseDown" MouseUp="CanvasMouseUp" MouseWheel="CanvasWheel"/>
+                    <Image Name="myPid" Stretch="UniformToFill"   MouseDown="CanvasMouseDown" MouseUp="CanvasMouseUp" MouseWheel="CanvasWheel"/>
                 </local:ZoomBorder>
             </Canvas>
-            
 
-            <Button Width="200" Grid.Row="1" HorizontalAlignment="Left" Click="btnAddPin" >Ajouter Procédure</Button>
-            <Button Width="200" Grid.Row="1" HorizontalAlignment="Right" Click="btnImportProc" >Importer Procédures</Button>
+            <RepeatButton x:Name="LineRightButton" 
+                    Grid.Column="1"
+                    Grid.Row="3"
+                    Content="&gt;" 
+                    Command="{x:Static ScrollBar.LineRightCommand}"      
+                    CommandTarget="{Binding ElementName=scrollViewerActive}"/>
+            <ScrollViewer Name="ScrollListProc" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Grid.Row="3" Grid.Column="1" CanContentScroll="True">
+                <ItemsControl Name="templ" ItemsSource="{Binding listProc}" ItemTemplate="{StaticResource dataTempl}" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
 
 

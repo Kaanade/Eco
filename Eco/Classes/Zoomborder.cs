@@ -63,6 +63,9 @@ namespace Eco
                 this.MouseMove += child_MouseMove;
                 this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(
                   child_PreviewMouseRightButtonDown);
+                var sts = GetScaleTransform(child);
+                sts.ScaleX = 0.2;
+                sts.ScaleY = 0.2;
             }
         }
 
@@ -72,8 +75,8 @@ namespace Eco
             {
                 // reset zoom
                 var st = GetScaleTransform(child);
-                st.ScaleX = 1.0;
-                st.ScaleY = 1.0;
+                st.ScaleX = 0.2;
+                st.ScaleY = 0.2;
 
                 // reset pan
                 var tt = GetTranslateTransform(child);
@@ -166,6 +169,8 @@ namespace Eco
                 }
             }
         }
+
+
 
         #endregion
 

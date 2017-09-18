@@ -28,13 +28,13 @@
 
             <Label Grid.Column="1"  Grid.Row="0" Grid.ColumnSpan="3"  FontSize="18" Margin="10">Création Procédure</Label>
 
-            <Label Grid.Column="1"   Grid.Row="1">Procédure</Label>
+            <Label Grid.Column="1"   Grid.Row="1" Foreground="Black">Procédure</Label>
             <TextBox Grid.Column="3"   Grid.Row="1" ToolTip="Entrez le nom de l'installation"  Name="txtNomProcedure" Height="23" VerticalAlignment="Top"/>
 
-            <Label Grid.Column="1"   Grid.Row="2">Numéro Procédure</Label>
+            <Label Grid.Column="1"   Grid.Row="2" Foreground="Black">Numéro Procédure</Label>
             <TextBox Grid.Column="3"   Grid.Row="2" ToolTip="Entrez le nom de l'installation"  Name="txtNumProcedure" Height="23" VerticalAlignment="Top"/>
 
-            <Label Grid.Column="1"   Grid.Row="3" Grid.ColumnSpan="2">Numéro Procédure Précédante</Label>
+            <Label Grid.Column="1"   Grid.Row="3" Grid.ColumnSpan="2" Foreground="Black">Numéro Procédure Précédante</Label>
             <TextBox Grid.Column="3"   Grid.Row="3" ToolTip="Entrez le nom de l'installation"  Name="txtNumProcedurePrec" Height="23" VerticalAlignment="Top"/>
 
             

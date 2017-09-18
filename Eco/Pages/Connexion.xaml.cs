@@ -61,6 +61,7 @@ namespace Eco
                 if (count == 1)
                 {
                     //MessageBox.Show("Login Successful!");
+                    
                     Properties.Settings.Default.Username = txtUserName.Text;
                     Properties.Settings.Default.Save();
 

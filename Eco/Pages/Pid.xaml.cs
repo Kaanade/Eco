@@ -20,6 +20,7 @@ using System.Data.SqlClient;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using iTextSharp.text;
+using WPFCustomMessageBox;
 
 namespace Eco
 {
@@ -130,7 +131,89 @@ namespace Eco
         private void openPdf(object sender, RoutedEventArgs e)
         {
             string nomProcedure = (sender as Button).Tag.ToString();
+            string nomProcPrec = "";
             double nbAvancement = 0, nbFields = 0;
+            int precSigned = 0, numPrec = 0;
+            SQLiteCommand cmdRead; SQLiteDataReader sdrRead;
+            string conn = "Data Source=EcoDB.db;Version=3";
+            SQLiteConnection connection = new SQLiteConnection(conn);
+            connection.Open();
+
+            cmdRead = new SQLiteCommand("SELECT numProcedurePrec FROM Procedure WHERE nomProcedure = @nomProcedure and systeme = @systeme", connection);
+            cmdRead.Parameters.AddWithValue("@nomProcedure", nomProcedure);
+            cmdRead.Parameters.AddWithValue("@systeme", systeme);
+            sdrRead = cmdRead.ExecuteReader();
+            while (sdrRead.Read())
+            {
+                numPrec = Convert.ToInt32(sdrRead[0]);
+            }
+
+            if(numPrec != 0)
+            {
+                cmdRead = new SQLiteCommand("SELECT t2.signed, t2.nomProcedure, t1.bypass FROM Procedure t1 JOIN Procedure t2 ON t1.numProcedurePrec = t2.numProcedure WHERE t1.nomProcedure = @nomProcedure and t1.systeme = @systeme", connection);
+                cmdRead.Parameters.AddWithValue("@nomProcedure", nomProcedure);
+                cmdRead.Parameters.AddWithValue("@systeme", systeme);
+                sdrRead = cmdRead.ExecuteReader();
+
+                while (sdrRead.Read())
+                {
+                    if (Convert.ToInt32(sdrRead[0]) == 1 || Convert.ToInt32(sdrRead[2]) == 1)
+                    {
+                        precSigned = 1;
+
+                    }
+                    else
+                    {
+                        nomProcPrec = sdrRead[1].ToString();
+                    }
+                }
+
+                if (precSigned == 0)
+                {
+                    //MessageBox.Show("Impossible veuillez d'abord remplir le formulaire : " + nomProcPrec);
+                    //return;
+
+                    if(CustomMessageBox.ShowOKCancel(
+                    "Impossible veuillez d'abord remplir le formulaire : " + nomProcPrec,
+                    "Procédure précédente à réaliser nécessaire",
+                    "Continuer",
+                    "Annuler") == MessageBoxResult.OK)
+                    {
+                        ModalPassPrec modalPassPrec = new ModalPassPrec();
+                        modalPassPrec.ShowDialog();
+
+
+                        if (modalPassPrec.Valid)
+                        {
+                            SQLiteCommand cmd;
+
+                            cmd = new SQLiteCommand("UPDATE Procedure SET bypass = 1 WHERE nomProcedure = @nomProcedure AND systeme = @systeme", connection);
+                            cmd.Parameters.AddWithValue("@nomProcedure", nomProcedure);
+                            cmd.Parameters.AddWithValue("@systeme", systeme);
+                            int a = cmd.ExecuteNonQuery();
+
+                            cmd  = new SQLiteCommand("INSERT INTO ProcedureBypass (nomProcedure, systeme, user, commentary) VALUES (@nomProcedure,@systeme, @user, @commentary)", connection);
+                            cmd.Parameters.AddWithValue("@nomProcedure", nomProcedure);
+                            cmd.Parameters.AddWithValue("@systeme", systeme);
+                            cmd.Parameters.AddWithValue("@user", App.Current.Properties["userID"]);
+                            cmd.Parameters.AddWithValue("@commentary", modalPassPrec.Commentary);
+                            a = cmd.ExecuteNonQuery();
+
+                        }
+                        else
+                            return;
+                    }
+                    else
+                        return;
+                    
+
+                }
+            }
+
+
+            
+                
+            
 
             ModalForm modalForm = new ModalForm(nomProcedure, systeme);
             modalForm.ShowDialog();
@@ -140,9 +223,10 @@ namespace Eco
             bool fncm = modalForm.FNC;
             bool doc = modalForm.Doc;
 
-            string conn = "Data Source=EcoDB.db;Version=3";
-            SQLiteConnection connection = new SQLiteConnection(conn);
-            connection.Open();
+            
+
+            
+
 
             if (form)
             {
@@ -166,8 +250,8 @@ namespace Eco
 
                         
 
-                        SQLiteCommand cmdRead = new SQLiteCommand("PRAGMA table_info(refFT)", connection);
-                        SQLiteDataReader sdrRead = cmdRead.ExecuteReader();
+                        cmdRead = new SQLiteCommand("PRAGMA table_info(refFT)", connection);
+                        sdrRead = cmdRead.ExecuteReader();
 
                         foreach (var key in fields.Keys)
                         {
@@ -241,7 +325,7 @@ namespace Eco
 
                 catch (Exception error)
                 {
-                    MessageBox.Show("Impossible d'ouvrir le fichier.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    //MessageBox.Show("Impossible d'ouvrir le fichier.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             else if (sign)
@@ -278,7 +362,7 @@ namespace Eco
                 ModalFNC modalFNC = new ModalFNC();
                 modalFNC.ShowDialog();
 
-                if (modalFNC.valid)
+                if (modalFNC.Valid)
                 {
                     string commentary = modalFNC.Commentary;
                     string nomFNC = modalFNC.NomFNC;

@@ -5,15 +5,17 @@ using System.Windows.Documents;
 namespace Eco
 {
     /// <summary>
-    /// Logique d'interaction pour ModalFNC.xaml
+    /// Logique d'interaction pour ModalPassPrec.xaml
     /// </summary>
-    public partial class ModalFNC : Window
+    public partial class ModalPassPrec : Window
     {
         private bool valid;
 
-        public ModalFNC()
+        public ModalPassPrec()
         {
             InitializeComponent();
+
+            txtNomUser.Content = App.Current.Properties["userName"].ToString() + " " + App.Current.Properties["userFirstName"].ToString();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -27,27 +29,15 @@ namespace Eco
             this.Hide();
         }
 
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-                txtPathPDF.Text = openFileDialog.FileName;
-        }
+        
 
         public string Commentary
         {
             get { return new TextRange(commentary.Document.ContentStart, commentary.Document.ContentEnd).Text; ; }
         }
 
-        public string pathPDF
-        {
-            get { return txtPathPDF.Text; }
-        }
-
-        public string NomFNC
-        {
-           get { return txtNomFNC.Text; }
-        }
+        
+       
 
         public bool Valid
         {

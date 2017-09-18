@@ -1,11 +1,18 @@
-﻿<Window x:Class="Eco.ModalFNC"
+﻿<Window x:Class="Eco.ModalPassPrec"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Eco"
         mc:Ignorable="d"
-        Title="ModalFNC" Height="500" Width="600">
+        Title="Autorisation" Height="700" Width="600">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <DockPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -19,27 +26,32 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="200"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="150"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="1"  Grid.Row="0" Grid.ColumnSpan="3"  FontSize="18" Margin="10,10,10,10">Fiche de non-conformité</Label>
+            <Label Grid.Column="1"  Grid.Row="0" Grid.ColumnSpan="3"  FontSize="18" Margin="10,10,10,10">Confirmation</Label>
 
-            <Label Grid.Column="1"   Grid.Row="1" Foreground="Black">Nom de la FNC</Label>
-            <TextBox Grid.Column="3"  Grid.Row="1" Name="txtNomFNC" Height="23" VerticalAlignment="Top"/>
+            <Label Grid.Column="1"   Grid.Row="1" Foreground="Black">En tant que : </Label>
+            <Label Grid.Column="3"  Grid.Row="1" Name="txtNomUser" Height="23" VerticalAlignment="Top"/>
 
-            <Label Grid.Column="1"   Grid.Row="2">Commentaires : </Label>
+            <Label Grid.Column="1"   Grid.Row="2">Commentaires :</Label>
             <RichTextBox Margin="10" Grid.Column="1"  Grid.Row="3" Grid.ColumnSpan="3" Name="commentary">
                 <FlowDocument>
                 </FlowDocument>
             </RichTextBox>
 
 
+
+
             <Label Grid.Column="1"   Grid.Row="4">Photo</Label>
-            <Button Grid.Column="2" Grid.Row="4" Name="btnOpenFile" Click="btnOpenFile_Click" Width="100" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" >Parcourir..</Button>
-            <TextBox Grid.Column="3"  Grid.Row="4" Name="txtPathPDF" Height="23" VerticalAlignment="Top"/>
-            
+            <Border Grid.Column="2"  Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,30,0"  x:Name="CanvasBorder" BorderBrush="Black" BorderThickness="1">
+                <InkCanvas Name="InkSign" Grid.Column="1"  Grid.Row="1">
+
+                </InkCanvas>
+            </Border>
+
 
 
             <StackPanel Grid.Column="2"  Grid.Row="5"  Margin="10"  HorizontalAlignment="Center"  Orientation="Horizontal">
@@ -59,3 +71,4 @@
         </Grid>
     </DockPanel>
 </Window>
+
