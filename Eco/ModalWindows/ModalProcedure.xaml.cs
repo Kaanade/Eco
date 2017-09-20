@@ -68,10 +68,7 @@ namespace Eco
             }
         }
 
-        public string pathPDF
-        {
-            get { return txtPathPDF.Text; }
-        }
+       
 
         public bool Valid
         {
@@ -94,12 +91,7 @@ namespace Eco
             this.Hide();
         }
 
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-                txtPathPDF.Text = openFileDialog.FileName;
-        }
+       
 
 
     }

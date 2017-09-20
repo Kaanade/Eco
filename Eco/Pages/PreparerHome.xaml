@@ -29,57 +29,12 @@
         </Grid>
 
 
-        <Grid x:Name="GridSlideMenu">
-
-            <DataGrid Name="ListProjects" AutoGenerateColumns="False" CanUserAddRows="false">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Installation" Binding="{Binding nomInstallation}" Width="200"/>
-                </DataGrid.Columns>
-                <DataGrid.ItemContainerStyle>
-                    <Style TargetType="DataGridRow">
-                        <Setter Property="Foreground" Value="#000000"/>
-                        <Setter Property="Background" Value="#000000"/>
-                        <Setter Property="Height" Value="50"/>
-                        <EventSetter Event="MouseLeftButtonUp" Handler="prepPid"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#FF2626"/>
-                            </Trigger>
-
-                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                <Setter Property="Background" Value="#FF9933"/>
-                            </Trigger>
-
-                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                <Setter Property="Background" Value="#FFB266"/>
-                            </Trigger>
-                        </Style.Triggers>
-
-                    </Style>
-                </DataGrid.ItemContainerStyle>
-                <DataGrid.Style>
-                    <Style TargetType="DataGrid">
-                        <Setter Property="AlternatingRowBackground" Value="Blue"/>
-                    </Style>
-                </DataGrid.Style>
-            </DataGrid>
-
-
-        </Grid>
+        
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="15" Name="slidebutton"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Click="btnHome_Click"/>
-        </Grid>
-        <Grid>
-            <Button VerticalAlignment="Top" Margin="-5,0,540,0" Height="256" Name="but_selProj" Width="265" >
+            <Button VerticalAlignment="Top" Margin="-5,0,540,0" Height="256" Name="but_selProj" Width="265" Click="btnSelSys">
                 <Button.Content>
                     <StackPanel>
-                        <TextBlock Text="Sélectionner Projet " />
+                        <TextBlock Text="Sélectionner Systeme " />
                     </StackPanel>
                 </Button.Content>
             </Button>
@@ -88,9 +43,9 @@
                     <TextBlock Text="Affecter" />
                 </StackPanel>
             </Button>
-            <Button VerticalAlignment="Top" Margin="535,0,0,0" Height="256" x:Name="but_impEqu" Width="265" Click="btnImportEquip">
+            <Button VerticalAlignment="Top" Margin="535,0,0,0" Height="256" x:Name="but_impEqu" Width="265" Click="btnAddEquip">
                 <StackPanel>
-                    <TextBlock Text="Importer Equipement" />
+                    <TextBlock Text="Ajouter nouveau type d'équipement" />
                 </StackPanel>
             </Button>
             <Button VerticalAlignment="Top" Margin="-5,261,540,0" Height="256" x:Name="but_assDoc" Width="265" >
@@ -106,6 +61,11 @@
             <Button VerticalAlignment="Top" Margin="535,261,0,0" Height="256" x:Name="but_newProj" Width="265" Click="btnCreerProjet" >
                 <StackPanel>
                     <TextBlock Text="Créer Projet" />
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top" Margin="555,522,1100,0" Height="256" x:Name="but_Exportdb" Width="265" Click="btnExportDB" >
+                <StackPanel>
+                    <TextBlock Text="Exporter DB" />
                 </StackPanel>
             </Button>
         </Grid>

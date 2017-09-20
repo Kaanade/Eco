@@ -6,6 +6,13 @@
         xmlns:local="clr-namespace:Eco"
         mc:Ignorable="d"
         Title="ModalFNC" Height="500" Width="600">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <DockPanel>
         <Grid>
             <Grid.ColumnDefinitions>

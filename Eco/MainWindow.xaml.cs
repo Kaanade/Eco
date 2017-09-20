@@ -30,16 +30,17 @@ namespace Eco
                 SQLiteConnection connection = new SQLiteConnection(conn);
                 connection.Open();
 
-                cmdRead = new SQLiteCommand("SELECT idUtilisateur, nomUtilisateur, prenomUtilisateur, fonction, mail FROM Utilisateurs WHERE login = @login", connection);
+                cmdRead = new SQLiteCommand("SELECT idUtilisateur, nomUtilisateur, prenomUtilisateur, fonction, mail, niveau FROM Utilisateurs WHERE login = @login", connection);
                 cmdRead.Parameters.AddWithValue("@login", "mberth");
                 sdrRead = cmdRead.ExecuteReader();
                 while (sdrRead.Read())
                 {
-                    App.Current.Properties["userID"] = Convert.ToInt32(sdrRead[0]);
-                    App.Current.Properties["userName"] = Convert.ToString(sdrRead[1]);
-                    App.Current.Properties["userFirstName"] = Convert.ToString(sdrRead[2]);
-                    App.Current.Properties["userFct"] = Convert.ToString(sdrRead[3]);
-                    App.Current.Properties["userMail"] = Convert.ToString(sdrRead[4]);
+                    App.Current.Properties["userID"] = Convert.ToInt32(sdrRead["idUtilisateur"]);
+                    App.Current.Properties["userName"] = Convert.ToString(sdrRead["nomUtilisateur"]);
+                    App.Current.Properties["userFirstName"] = Convert.ToString(sdrRead["prenomUtilisateur"]);
+                    App.Current.Properties["userFct"] = Convert.ToString(sdrRead["fonction"]);
+                    App.Current.Properties["userMail"] = Convert.ToString(sdrRead["mail"]);
+                    App.Current.Properties["niveau"] = Convert.ToInt32(sdrRead["niveau"]);
                 }
                 connection.Close();
                 

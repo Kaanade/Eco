@@ -128,6 +128,11 @@
       <HintPath>..\packages\MahApps.Metro.IconPacks.Modern.1.9.0\lib\net46\MahApps.Metro.IconPacks.Modern.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -182,14 +187,17 @@
     <Compile Include="Classes\Pin.cs" />
     <Compile Include="Classes\Procedure.cs" />
     <Compile Include="Classes\Zoomborder.cs" />
+    <Compile Include="ModalWindows\ModalAddTypeEquip.xaml.cs">
+      <DependentUpon>ModalAddTypeEquip.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ModalWindows\ModalFormPrep.xaml.cs">
       <DependentUpon>ModalFormPrep.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModalWindows\ModalPassPrec.xaml.cs">
       <DependentUpon>ModalPassPrec.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ModalWindows\ModalRealiserHome.xaml.cs">
-      <DependentUpon>ModalRealiserHome.xaml</DependentUpon>
+    <Compile Include="ModalWindows\ModalPIDHome.xaml.cs">
+      <DependentUpon>ModalPIDHome.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModalWindows\ModalPlacePin.xaml.cs">
       <DependentUpon>ModalPlacePin.xaml</DependentUpon>
@@ -243,6 +251,10 @@
     <Compile Include="Pages\RealiserHome.xaml.cs">
       <DependentUpon>RealiserHome.xaml</DependentUpon>
     </Compile>
+    <Page Include="ModalWindows\ModalAddTypeEquip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ModalWindows\ModalFormPrep.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -251,7 +263,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ModalWindows\ModalRealiserHome.xaml">
+    <Page Include="ModalWindows\ModalPIDHome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

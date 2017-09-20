@@ -57,9 +57,10 @@
                 </Rectangle>
             </Button>
             
-            <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Click="btnAddPin" VerticalAlignment="Top" >Ajouter Procédure</Button>
-            <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="220,0" Click="btnExport" >Exporter FT</Button>
-            <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="440,0" Click="btnSeeFNC" >Voir FNC</Button>
+            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Click="btnAddPin" VerticalAlignment="Top" >Ajouter Procédure</Button>
+            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="200,0" Click="btnExport" >Exporter FT</Button>
+            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="400,0" Click="btnSeeFNC" >Voir FNC</Button>
+            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="600,0" Click="btnPlanQ" >Plan qualité</Button>
 
             <Canvas  ClipToBounds="True" x:Name="canvasPid" Grid.Row="3" Grid.Column="0" Width="1720" Height="970" >
                 <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray" Canvas.Left="0" >

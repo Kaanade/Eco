@@ -21,6 +21,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using iTextSharp.text;
 using WPFCustomMessageBox;
+using Microsoft.Office.Interop;
 
 namespace Eco
 {
@@ -79,6 +80,78 @@ namespace Eco
             modalListFNC modalListFNC = new modalListFNC(systeme);
             modalListFNC.ShowDialog();
 
+        }
+
+        private void btnPlanQ(object sender, RoutedEventArgs e)
+        {
+            if (CustomMessageBox.ShowOKCancel(
+                   "Voulez vous faire une export au format xlsx du Plan Qualité ?",
+                   "Plan Qualité",
+                   "Valider",
+                   "Annuler") == MessageBoxResult.OK)
+            {
+                string excelPath = AppDomain.CurrentDomain.BaseDirectory + "Temp/tempPlanQ.xls";
+
+                Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+                Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
+                Microsoft.Office.Interop.Excel.Worksheet xlWorkSheet;
+                object misValue = System.Reflection.Missing.Value;
+
+                xlWorkBook = xlApp.Workbooks.Add(misValue);
+                xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+                xlWorkSheet.Name = "PlanQualite";
+
+                xlWorkSheet.Cells[1, 1] = "Systeme";
+                xlWorkSheet.Cells[1, 2] = "Procédure";
+                xlWorkSheet.Cells[1, 3] = "Avancement";
+                xlWorkSheet.Cells[1, 4] = "MAJ";
+                xlWorkSheet.Cells[1, 5] = "Utilisateur";
+
+
+                xlWorkBook.SaveAs(excelPath, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+                xlWorkBook.Close(true, misValue, misValue);
+                xlApp.Quit();
+
+                System.Data.OleDb.OleDbConnection MyConnection;
+                System.Data.OleDb.OleDbCommand myCommand = new System.Data.OleDb.OleDbCommand();
+                string sql = null;
+                
+                string excelConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + excelPath + ";Extended Properties=Excel 12.0;Persist Security Info=True";
+                MyConnection = new System.Data.OleDb.OleDbConnection(excelConnectionString);
+                MyConnection.Open();
+                myCommand.Connection = MyConnection;
+                
+                SQLiteCommand cmdRead, cmdRead2; SQLiteDataReader sdrRead, sdrRead2;
+                string conn = "Data Source=EcoDB.db;Version=3";
+                string nomPrenom = "";
+                SQLiteConnection connection = new SQLiteConnection(conn);
+                connection.Open();
+                cmdRead = new SQLiteCommand("SELECT nomProcedure, avancement, date, user, date FROM Procedure WHERE systeme = @systeme", connection);
+                cmdRead.Parameters.AddWithValue("@systeme", systeme);
+                sdrRead = cmdRead.ExecuteReader();
+                while (sdrRead.Read())
+                {
+                    cmdRead2 = new SQLiteCommand("SELECT  nomUtilisateur, prenomUtilisateur FROM Utilisateurs WHERE idUtilisateur = @user", connection);
+                    cmdRead2.Parameters.AddWithValue("@user", Convert.ToInt32(sdrRead["user"]));
+                    sdrRead2 = cmdRead2.ExecuteReader();
+                    while (sdrRead2.Read())
+                    {
+                        nomPrenom = sdrRead2["nomUtilisateur"].ToString() + " " + sdrRead2["prenomUtilisateur"].ToString();
+                    }
+                    sql = "Insert into [PlanQualite$] (Systeme, Procédure, Avancement, MAJ, Utilisateur) values(@systeme, @nomProcedure, @avancement, @date, @utilisateur)";
+                    myCommand.CommandText = sql;
+                    myCommand.Parameters.AddWithValue("@systeme", systeme);
+                    myCommand.Parameters.AddWithValue("@nomProcedure", Convert.ToString(sdrRead["nomProcedure"]));
+                    myCommand.Parameters.AddWithValue("@avancement", Convert.ToString(sdrRead["avancement"]));
+                    myCommand.Parameters.AddWithValue("@date", Convert.ToString(sdrRead["date"]));
+                    myCommand.Parameters.AddWithValue("@utilisateur", nomPrenom);
+                    myCommand.ExecuteNonQuery();
+                    myCommand.Parameters.Clear();
+                    nomPrenom = "";
+                }
+
+                MyConnection.Close();
+            }
         }
 
         private void btnExport(object sender, RoutedEventArgs e)
@@ -295,8 +368,8 @@ namespace Eco
                             {
                                 int a = cmd.ExecuteNonQuery();
 
-                                //if (cmd.ExecuteNonQuery() == 0)
-                                //    Console.WriteLine("Erreur - Key : " + key + " - Value : " + value);
+                                if (a == 0)
+                                    Console.WriteLine("Erreur - Key : " + key + " - Value : " + value);
 
 
 
@@ -312,10 +385,11 @@ namespace Eco
                         double avancement = 100 * (double)(nbAvancement / nbFields);
 
                         SQLiteCommand cmd2;
-                        cmd2 = new SQLiteCommand("UPDATE Procedure SET avancement = @avancement WHERE nomProcedure = @nomProcedure AND systeme = @systeme", connection);
+                        cmd2 = new SQLiteCommand("UPDATE Procedure SET avancement = @avancement, user = @user WHERE nomProcedure = @nomProcedure AND systeme = @systeme", connection);
                         cmd2.Parameters.AddWithValue("@avancement", avancement);
                         cmd2.Parameters.AddWithValue("@nomProcedure", nomProcedure);
                         cmd2.Parameters.AddWithValue("@systeme", systeme);
+                        cmd2.Parameters.AddWithValue("@user", App.Current.Properties["userID"]);
 
                         int b = cmd2.ExecuteNonQuery();
 
@@ -491,7 +565,6 @@ namespace Eco
                             string nomProcedure = modalProc.NomProc;
                             int numProcedure = modalProc.NumProc;
                             int numProcedurePrec = modalProc.NumProcPrec;
-                            string pathPDF = modalProc.pathPDF;
                             string typeEquipement = modalProc.TypeEquipement;
                             string path = AppDomain.CurrentDomain.BaseDirectory + "Projets/" + systeme + "/" + nomProcedure ;
 
@@ -521,6 +594,12 @@ namespace Eco
                             cmd4.Parameters.AddWithValue("@systeme", systeme);
 
 
+                            // ICi modfif Proc  a partir de bdd
+                            SQLiteCommand cmd5 = new SQLiteCommand("SELECT urlFt FROM DocEquipement WHERE titreDocEquipement = @typeEquipement", connection);
+                            cmd5.Parameters.AddWithValue("@typeEquipement", typeEquipement);
+                            string pathTemplate = AppDomain.CurrentDomain.BaseDirectory + "Doc/FT/FT-" + typeEquipement + ".pdf";
+                            string pathProc = AppDomain.CurrentDomain.BaseDirectory + "Projets/" + systeme + "/" + nomProcedure + "/" + nomProcedure + ".pdf";
+
 
                             try
                             {
@@ -547,7 +626,7 @@ namespace Eco
                                         DirectoryInfo di = Directory.CreateDirectory(path);
                                     }
 
-                                    File.Copy(@pathPDF, path + "/" + nomProcedure + ".pdf");
+                                    File.Copy(pathTemplate, pathProc);
 
                                     this.NavigationService.Navigate(new Pid(systeme));
                                 }
@@ -753,8 +832,7 @@ namespace Eco
 
             templ.ItemsSource = listProc;
 
-            labelAvancementSysteme.Content = "Avancement : [" + Convert.ToString(Math.Round((avancementTotal / i))) + "%]";
-            progressBarAvSys.Value = Math.Round((avancementTotal / i));
+            
 
         }
         

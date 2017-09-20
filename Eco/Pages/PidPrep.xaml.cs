@@ -127,7 +127,7 @@ namespace Eco
 
 
 
-                string pathTemplate = AppDomain.CurrentDomain.BaseDirectory + "Doc/FT/FT-" + Reader["typeEquipement"].ToString() + ".pdf";
+                string pathTemplate = AppDomain.CurrentDomain.BaseDirectory + "Doc/FT/" + Reader["typeEquipement"].ToString() + ".pdf";
                 string pathProc = AppDomain.CurrentDomain.BaseDirectory + "Projets/" + systeme + "/" + Reader["nomProcedure"].ToString();
                 // Determine whether the directory exists.
                 if (!Directory.Exists(pathProc))
@@ -378,7 +378,15 @@ namespace Eco
                     int g = cmd6.ExecuteNonQuery();
 
                     string path = AppDomain.CurrentDomain.BaseDirectory + "Projets/" + systeme + "/" + nomProcedure;
-                    Directory.Delete(path, true);
+                    // Determine whether the directory exists.
+                    if (Directory.Exists(path))
+                    {
+                        // Try to create the directory.
+                        Directory.Delete(path, true);
+                    }
+                    
+
+                    this.NavigationService.Navigate(new PidPrep(systeme));
                 }
                 else
                 {
@@ -704,9 +712,12 @@ namespace Eco
             }
 
             templ.ItemsSource = listProc;
-
-            labelAvancementSysteme.Content = "Avancement : [" + Convert.ToString(Math.Round((avancementTotal / i))) + "%]";
-            progressBarAvSys.Value = Math.Round((avancementTotal / i));
+            if (i != 0)
+            {
+                labelAvancementSysteme.Content = "Avancement : [" + Convert.ToString(Math.Round((avancementTotal / i))) + "%]";
+                progressBarAvSys.Value = Math.Round((avancementTotal / i));
+            }
+            
 
 
         }

@@ -15,6 +15,9 @@ using System.Windows.Shapes;
 using System.Data;
 using System.Data.SQLite;
 using System.Data.SqlClient;
+using iTextSharp.text.pdf;
+using Microsoft.Win32;
+using System.IO;
 
 namespace Eco
 {
@@ -31,14 +34,11 @@ namespace Eco
             SQLiteConnection connection = new SQLiteConnection(conn);
             SQLiteCommand cmd = new SQLiteCommand("Select * from Installation", connection);
 
-            SQLiteDataAdapter adapt = new SQLiteDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            adapt.Fill(ds,"Projects");
-            connection.Close();
-
-            ListProjects.ItemsSource = ds.Tables["Projects"].DefaultView;
-
-
+            if(Convert.ToInt32(App.Current.Properties["niveau"]) != 0)
+            {
+                but_Exportdb.Visibility = Visibility.Collapsed;
+            }
+            
         }
 
         //Navigation
@@ -52,18 +52,14 @@ namespace Eco
             this.NavigationService.Navigate(new Uri("Pages/Affecter.xaml", UriKind.Relative));
         }
 
-        private void btnImportEquip(object sender, RoutedEventArgs e)
+        private void btnAddEquip(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new Uri("Pages/ImportationEquipement.xaml", UriKind.Relative));
-        }
+            //this.NavigationService.Navigate(new Uri("Pages/ImportationEquipement.xaml", UriKind.Relative));
 
-        private void btnHome_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.GridSlideMenu.IsVisible)
-                this.GridSlideMenu.Visibility = Visibility.Collapsed;
-            else
-                this.GridSlideMenu.Visibility = Visibility.Visible;
+            ModalAddTypeEquip modalAddTypeEquip = new ModalAddTypeEquip();
+            modalAddTypeEquip.ShowDialog();
         }
+       
 
         private void btnClose(object sender, RoutedEventArgs e)
         {
@@ -77,8 +73,7 @@ namespace Eco
 
         private void prepPid(object sender, MouseButtonEventArgs e)
         {
-            DataRowView drv = (DataRowView)ListProjects.SelectedItem;
-            string installation = (drv["nomInstallation"]).ToString();
+         
             /*MessageBoxResult messageBoxResult = MessageBox.Show("Voulez vous sélectionner le projet : " + result + " ?", "Selection Projet", MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
@@ -90,14 +85,51 @@ namespace Eco
                 MessageBox.Show("Non");
             }*/
 
-            ModalSysteme modalSysteme = new ModalSysteme(installation);
-            modalSysteme.ShowDialog();
+            //ModalSysteme modalSysteme = new ModalSysteme(installation);
+            //modalSysteme.ShowDialog();
 
-            if(modalSysteme.Valid)
-                this.NavigationService.Navigate(new PidPrep(modalSysteme.Systeme));
+            //if(modalSysteme.Valid)
+            //    this.NavigationService.Navigate(new PidPrep(modalSysteme.Systeme));
 
 
         }
+
+        private void btnSelSys(object sender, RoutedEventArgs e)
+        {
+            ModalPIDHome modalPIDHome = new ModalPIDHome();
+            modalPIDHome.ShowDialog();
+
+            if (modalPIDHome.Valid)
+            {
+                string systeme = modalPIDHome.RSysteme;
+                this.NavigationService.Navigate(new PidPrep(modalPIDHome.RSysteme));
+            }
+        }
+
+        private void btnExportDB(object sender, RoutedEventArgs e)
+        {
+            string path = "";
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                path = openFileDialog.FileName;
+            }
+            
+            string text = File.ReadAllText(path);
+            text = text.Replace("AUTOINCREMENT", "AUTO_INCREMENT");
+            text = text.Replace("TEXT", "varchar(100) COLLATE utf8_bin NOT NULL");
+            text = text.Replace("INTEGER", "int(11)");
+            text = text.Replace("\"", "");
+            text = text.Replace("`", "");
+            text = text.Replace("BEGIN TRANSACTION;", "");
+            text = text.Replace("COMMIT;", "");
+            File.WriteAllText(path, text);
+
+            MessageBox.Show("Exportation Réussie");
+
+        }
+
 
     }
 }

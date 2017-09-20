@@ -10,13 +10,13 @@ namespace Eco
     /// <summary>
     /// Logique d'interaction pour ModalRealiserHome.xaml
     /// </summary>
-    public partial class ModalRealiserHome : Window
+    public partial class ModalPIDHome : Window
     {
         private bool valid;
         private string rSysteme, rSite;
         List<Systeme> systemeList;
 
-        public ModalRealiserHome()
+        public ModalPIDHome()
         {
             InitializeComponent();
 

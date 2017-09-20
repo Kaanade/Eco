@@ -53,13 +53,13 @@ namespace Eco
 
         private void btnReal(object sender, EventArgs e)
         {
-            ModalRealiserHome modalRealHome = new ModalRealiserHome();
-            modalRealHome.ShowDialog();
+            ModalPIDHome modalPIDHome = new ModalPIDHome();
+            modalPIDHome.ShowDialog();
             
-            if (modalRealHome.Valid)
+            if (modalPIDHome.Valid)
             {
-                string systeme = modalRealHome.RSysteme;
-                this.NavigationService.Navigate(new Pid(modalRealHome.RSysteme));
+                string systeme = modalPIDHome.RSysteme;
+                this.NavigationService.Navigate(new Pid(modalPIDHome.RSysteme));
             }
                 
         }
