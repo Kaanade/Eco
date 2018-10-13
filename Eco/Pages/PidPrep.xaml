@@ -60,6 +60,9 @@
             <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Click="btnAddPin" VerticalAlignment="Top" >Ajouter Procédure</Button>
             <Button Width="220" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="220,0" Click="btnImportProc" >Importer Procédures</Button>
 
+            <!--<Button Width="20" Height="20" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Click="ZoomIn" VerticalAlignment="Top" Visibility="Hidden">+</Button>
+            <Button Width="20" Height="20" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Click="ZoomOut" Margin="20,0" VerticalAlignment="Top" Visibility="Hidden">-</Button> -->
+
             <Canvas  ClipToBounds="True" x:Name="canvasPid" Grid.Row="3" Grid.Column="0" Width="1720" Height="920" >
                 <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray" Canvas.Left="0" >
                     <Image Name="myPid" Stretch="UniformToFill"   MouseDown="CanvasMouseDown" MouseUp="CanvasMouseUp" MouseWheel="CanvasWheel"/>

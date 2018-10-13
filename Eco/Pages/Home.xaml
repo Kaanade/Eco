@@ -45,7 +45,13 @@
 
     <DockPanel>
         <Grid DockPanel.Dock="Top" Height="50" >
-            
+            <Button ToolTip="Minimiser l'application"  Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50" Margin="50,0"  Click="btnMinimize" Grid.Column="1">
+                <Rectangle Width="20" Height="7" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_minus}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
             <Button ToolTip="Fermer l'application" x:Name="button" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose">
                 <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
@@ -61,14 +67,14 @@
             </Grid.ColumnDefinitions>
             <ToolBarTray DockPanel.Dock="Top" Grid.ColumnSpan="2">
             </ToolBarTray>
-            <Button VerticalAlignment="Top" Grid.Column="0" Height="560"  HorizontalAlignment="Stretch"  Click="btnPrep">
+            <Button VerticalAlignment="Top" Grid.Column="0" Height="520"  HorizontalAlignment="Stretch"  Click="btnPrep">
                 <Button.Content>
                     <StackPanel>
                         <TextBlock Text="Préparer" />
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button VerticalAlignment="Top" Grid.Column="1"  Height="560" HorizontalAlignment="Stretch" Click="btnReal" >
+            <Button VerticalAlignment="Top" Grid.Column="1"  Height="520" HorizontalAlignment="Stretch" Click="btnReal" >
                 <StackPanel>
                     <TextBlock Text="Réaliser" />
                 </StackPanel>

@@ -25,7 +25,7 @@ namespace Eco
             SQLiteConnection connection = new SQLiteConnection(conn);
             connection.Open();
 
-            SQLiteCommand cmd = new SQLiteCommand("Select nomSysteme, site from Systeme", connection);
+            SQLiteCommand cmd = new SQLiteCommand("Select nomSysteme, installation from Systeme", connection);
             /*SQLiteDataAdapter adapt = new SQLiteDataAdapter(cmd);
             DataSet ds = new DataSet();
             adapt.Fill(ds, "Systemes");
@@ -34,7 +34,7 @@ namespace Eco
             SQLiteDataReader r = cmd.ExecuteReader();
             while (r.Read())
             {
-                systemeList.Add(new Systeme(Convert.ToString(r["nomSysteme"]), Convert.ToString(r["site"])));
+                systemeList.Add(new Systeme(Convert.ToString(r["nomSysteme"]), Convert.ToString(r["installation"])));
             }
 
             ListSysteme.ItemsSource = systemeList;

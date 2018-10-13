@@ -118,7 +118,7 @@ namespace Eco
             
             string text = File.ReadAllText(path);
             text = text.Replace("AUTOINCREMENT", "AUTO_INCREMENT");
-            text = text.Replace("TEXT", "varchar(100) COLLATE utf8_bin NOT NULL");
+            text = text.Replace("TEXT", "varchar(100) COLLATE utf8_bin");
             text = text.Replace("INTEGER", "int(11)");
             text = text.Replace("\"", "");
             text = text.Replace("`", "");

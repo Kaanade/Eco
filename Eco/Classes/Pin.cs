@@ -30,7 +30,7 @@ namespace Eco
 
         }
 
-        public Pin(Point _position, int signed)
+        public Pin(Point _position, int signed, int avancement)
         {
             position = _position;
             position.Y -= offsetY;
@@ -52,6 +52,8 @@ namespace Eco
             string imagePath;
             if (signed == 1)
                 imagePath = AppDomain.CurrentDomain.BaseDirectory + "Images/pin_green.png";
+            else if(avancement > 0)
+                imagePath = AppDomain.CurrentDomain.BaseDirectory + "Images/pin_orange.png";
             else
                 imagePath = AppDomain.CurrentDomain.BaseDirectory + "Images/pin_red.png";
 

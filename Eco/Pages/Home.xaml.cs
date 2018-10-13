@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Net;
 
 namespace Eco
 {
@@ -44,6 +45,8 @@ namespace Eco
             InitializeComponent();
             //labellLogin.Content = Properties.Settings.Default.Username;
             DataContext = this;
+
+            //but_sync.Width = SystemParameters.PrimaryScreenWidth / 2;
         }
 
         private void btnPrep(object sender, EventArgs e)
@@ -63,6 +66,13 @@ namespace Eco
             }
                 
         }
+        private void btnSync(object sender, EventArgs e)
+        {
+            if(CheckConnection())
+                MessageBox.Show("OK");
+            else
+                MessageBox.Show("Impossible de se connecter au serveur. Veuillez vérifier votre connection.");
+        }
 
         private void OnPropertyChanged(String name)
         {
@@ -77,7 +87,29 @@ namespace Eco
             Application.Current.Shutdown();
         }
 
+        private void btnMinimize(object sender, RoutedEventArgs e)
+        {
+            Window window = Window.GetWindow(this);
 
+            window.WindowState = WindowState.Minimized;
+        }
+
+
+        private bool CheckConnection()
+        {
+            WebClient client = new WebClient();
+            try
+            {
+                using (client.OpenRead("http://www.google.com"))
+                {
+                }
+                return true;
+            }
+            catch (WebException)
+            {
+                return false;
+            }
+        }
     }
 }
 

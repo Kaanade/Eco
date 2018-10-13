@@ -15,7 +15,7 @@ namespace Eco
         private bool valid;
         private string systeme;
 
-        public ModalSysteme(string Site)
+        public ModalSysteme(string installation)
         {
             InitializeComponent();
             
@@ -23,16 +23,16 @@ namespace Eco
             SQLiteConnection conn = new SQLiteConnection("Data Source=EcoDB.db;Version=3");
             conn.Open();
 
-            var command = conn.CreateCommand();
+            var cmd = conn.CreateCommand();
 
             //Read from table
-            command.CommandText = @"SELECT nomSysteme FROM systeme WHERE Site = @Site";
-            command.Parameters.AddWithValue("@Site", Site);
-            SQLiteDataReader sdr = command.ExecuteReader();
+            cmd.CommandText = @"SELECT nomSysteme FROM systeme WHERE installation = @installation";
+            cmd.Parameters.AddWithValue("@installation", installation);
+            SQLiteDataReader sdr = cmd.ExecuteReader();
 
             while (sdr.Read())
             {
-                comboSysteme.Items.Add(sdr[0]);
+                comboSysteme.Items.Add(sdr["nomSysteme"]);
             }
 
             sdr.Close();

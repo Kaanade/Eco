@@ -55,11 +55,22 @@ namespace Eco
             string conn = "Data Source=EcoDB.db;Version=3";
             SQLiteConnection connection = new SQLiteConnection(conn);
             connection.Open();
-            SQLiteCommand cmd = new SQLiteCommand("INSERT INTO Installation (nomInstallation) VALUES (@nomInstallation)", connection);
+            SQLiteCommand cmd = new SQLiteCommand("INSERT INTO Systeme (nomSysteme, idPID, installation) VALUES (@nomSysteme, @idPid, @nomInstallation)", connection);
             cmd.Parameters.AddWithValue("@nomInstallation", txtNomInstallation.Text);
+            cmd.Parameters.AddWithValue("@idPid", txtNomPid.Text);
+            cmd.Parameters.AddWithValue("@nomSysteme", txtNomSysteme.Text);
             try
             {
                 cmd.ExecuteNonQuery();
+
+                string path = AppDomain.CurrentDomain.BaseDirectory + "Projets/" + txtNomSysteme.Text;
+                // Determine whether the directory exists.
+                if (Directory.Exists(path))
+                {
+                    // Try to create the directory.
+                    Directory.Delete(path, true);
+                }
+                Directory.CreateDirectory(path);
                 MessageBox.Show("Création du projet : " + test);
                 connection.Close();
             }

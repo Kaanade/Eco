@@ -64,14 +64,6 @@
                 <TextBlock Text="FNC" />
             </StackPanel>
         </Button>
-        
-        
-        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="200" Width="250" Click="btnDoc" >
-            
-            <StackPanel>
-                <TextBlock Text="Doc" />
-            </StackPanel>
-        </Button>
         <Label Name="labelNbDoc" Foreground="WhiteSmoke" Margin="440,360,10,10"></Label>
     </Grid>
 </Window>

@@ -25,7 +25,7 @@
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="200"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition />
@@ -33,19 +33,13 @@
 
             <Label Grid.Column="1"  Grid.Row="0" Grid.ColumnSpan="3"  FontSize="18" Margin="10,10,10,10">Fiche de non-conformité</Label>
 
-            <Label Grid.Column="1"   Grid.Row="1" Foreground="Black">Nom de la FNC</Label>
-            <TextBox Grid.Column="3"  Grid.Row="1" Name="txtNomFNC" Height="23" VerticalAlignment="Top"/>
-
-            <Label Grid.Column="1"   Grid.Row="2">Commentaires : </Label>
-            <RichTextBox Margin="10" Grid.Column="1"  Grid.Row="3" Grid.ColumnSpan="3" Name="commentary">
-                <FlowDocument>
-                </FlowDocument>
-            </RichTextBox>
+            <Label Grid.Column="1"   Grid.Row="2">Formulaire FNC : </Label>
+            <Button Grid.Column="2" Grid.Row="2" Name="btnFormFNC" Click="btnOpenFNC" Width="100" Height="23" VerticalAlignment="Center" HorizontalAlignment="Center" >Formualire</Button>
 
 
-            <Label Grid.Column="1"   Grid.Row="4">Photo</Label>
-            <Button Grid.Column="2" Grid.Row="4" Name="btnOpenFile" Click="btnOpenFile_Click" Width="100" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" >Parcourir..</Button>
-            <TextBox Grid.Column="3"  Grid.Row="4" Name="txtPathPDF" Height="23" VerticalAlignment="Top"/>
+            <Label Grid.Column="1"   Grid.Row="3">Photo</Label>
+            <Button Grid.Column="2" Grid.Row="3" Name="btnOpenFile" Click="btnOpenFile_Click" Width="100" Height="23" VerticalAlignment="Center" HorizontalAlignment="Center" >Parcourir..</Button>
+            <TextBox Grid.Column="3"  Grid.Row="3" Name="txtPathPDF" Height="23" VerticalAlignment="Top"/>
             
 
 

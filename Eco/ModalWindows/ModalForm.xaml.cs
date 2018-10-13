@@ -19,13 +19,14 @@ namespace Eco
             SQLiteConnection conn = new SQLiteConnection("Data Source=EcoDB.db;Version=3");
             conn.Open();
             
-            var command = conn.CreateCommand();
+            var cmd = conn.CreateCommand();
 
             //Read from table
-            command.CommandText = @"SELECT * FROM refDoc WHERE nomProcedure = @nomProcedure AND systeme = @systeme";
-            command.Parameters.AddWithValue("@nomProcedure", nomProcedure);
-            command.Parameters.AddWithValue("@systeme", systeme);
-            SQLiteDataReader sdr = command.ExecuteReader();
+            cmd.CommandText = @"SELECT * FROM refDoc WHERE nomProcedure = @nomProcedure AND systeme = @systeme AND installation = @installation";
+            cmd.Parameters.AddWithValue("@nomProcedure", nomProcedure);
+            cmd.Parameters.AddWithValue("@systeme", systeme);
+            cmd.Parameters.AddWithValue("@installation", App.Current.Properties["installation"]);
+            SQLiteDataReader sdr = cmd.ExecuteReader();
 
             while (sdr.Read())
             {
@@ -33,13 +34,14 @@ namespace Eco
             }
             sdr.Close();
 
-            var command2 = conn.CreateCommand();
+            var cmd2 = conn.CreateCommand();
 
             //Read from table
-            command2.CommandText = @"SELECT avancement FROM Procedure WHERE nomProcedure = @nomProcedure AND systeme = @systeme";
-            command2.Parameters.AddWithValue("@nomProcedure", nomProcedure);
-            command2.Parameters.AddWithValue("@systeme", systeme);
-            SQLiteDataReader sdr2 = command2.ExecuteReader();
+            cmd2.CommandText = @"SELECT avancement FROM ProcedureEssai WHERE nomProcedure = @nomProcedure AND systeme = @systeme AND installation = @installation";
+            cmd2.Parameters.AddWithValue("@nomProcedure", nomProcedure);
+            cmd2.Parameters.AddWithValue("@systeme", systeme);
+            cmd2.Parameters.AddWithValue("@installation", App.Current.Properties["installation"]);
+            SQLiteDataReader sdr2 = cmd2.ExecuteReader();
 
             while (sdr2.Read())
             {

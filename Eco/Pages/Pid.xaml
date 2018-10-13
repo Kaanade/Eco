@@ -49,18 +49,29 @@
                 </Rectangle>
             </Button>
 
-            <Button ToolTip="Fermer l'application" x:Name="button" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose" Grid.Column="1">
+            <Button ToolTip="Minimiser l'application"  Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50" Margin="50,0"  Click="btnMinimize" Grid.Column="1">
+                <Rectangle Width="20" Height="7" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_minus}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+            <Button ToolTip="Fermer l'application" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose" Grid.Column="1">
                 <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_close}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
+
             
-            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Click="btnAddPin" VerticalAlignment="Top" >Ajouter Procédure</Button>
-            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="200,0" Click="btnExport" >Exporter FT</Button>
-            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="400,0" Click="btnSeeFNC" >Voir FNC</Button>
-            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="600,0" Click="btnPlanQ" >Plan qualité</Button>
+
+            <!--<Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Click="btnAddPin" VerticalAlignment="Top" >Ajouter Procédure</Button>-->
+            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="000,0" Click="btnExport" >Exporter FT</Button>
+            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="200,0" Click="btnOpenExplorer" >Ouvrir Explorer</Button>
+            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="200,0" Click="btnSeeFNC" Visibility="Collapsed">Voir FNC</Button>
+            <Button Width="200" Height="50" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="400,0" Click="btnPlanQ" Visibility="Hidden" >Plan qualité</Button>
 
             <Canvas  ClipToBounds="True" x:Name="canvasPid" Grid.Row="3" Grid.Column="0" Width="1720" Height="970" >
                 <local:ZoomBorder x:Name="border" ClipToBounds="True" Background="Gray" Canvas.Left="0" >

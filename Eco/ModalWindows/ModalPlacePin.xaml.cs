@@ -21,12 +21,14 @@ namespace Eco
             SQLiteConnection conn = new SQLiteConnection("Data Source=EcoDB.db;Version=3");
             conn.Open();
 
-            var command = conn.CreateCommand();
+            var cmd = conn.CreateCommand();
 
             //Read from table
-            command.CommandText = @"SELECT nomProcedure FROM Procedure WHERE systeme = @systeme";
-            command.Parameters.AddWithValue("@systeme", systeme);
-            SQLiteDataReader sdr = command.ExecuteReader();
+            cmd.CommandText = @"SELECT nomProcedure FROM ProcedureEssai WHERE systeme = @systeme AND installation = @installation";
+            cmd.Parameters.AddWithValue("@systeme", systeme);
+            cmd.Parameters.AddWithValue("@installation", App.Current.Properties["installation"]);
+            Console.WriteLine(App.Current.Properties["installation"]);
+            SQLiteDataReader sdr = cmd.ExecuteReader();
 
             while (sdr.Read())
             {

@@ -41,7 +41,7 @@
             <Button Grid.Column="2" Grid.Row="2" Name="btnTemplate" Click="btnOpenTemplate_Click" Width="100" Height="23" VerticalAlignment="Top" HorizontalAlignment="Center" >Parcourir..</Button>
             <TextBox Grid.Column="3"  Grid.Row="2" Name="txtPathTemplate" Height="23" VerticalAlignment="Top" IsReadOnly = "True"/>
 
-            <Label Grid.Column="1"   Grid.Row="3">Type Equipement</Label>
+            <Label Grid.Column="1"   Grid.Row="3">Documentation</Label>
             <Button Grid.Column="2" Grid.Row="3" Name="btnDocEquipement" Click="btnOpenDoc_Click" Width="100" Height="23" VerticalAlignment="Top" HorizontalAlignment="Center" >Parcourir..</Button>
             <TextBox Grid.Column="3"  Grid.Row="3" Name="txtPathDoc" Height="23" VerticalAlignment="Top" IsReadOnly = "True"/>
 

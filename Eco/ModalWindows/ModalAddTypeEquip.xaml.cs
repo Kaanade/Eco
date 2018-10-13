@@ -67,7 +67,7 @@ namespace Eco
                     AcroFields fieldsType = reader.AcroFields;
                     int field_type = 0;
                     string type = Regex.Replace(txtTypeEquip.Text, @"\s+", "");
-                    string createSQL = "CREATE TABLE \"" + type + "\" ('id" + type + "' INTEGER PRIMARY KEY AUTOINCREMENT, 'nomProcedure' TEXT, 'systeme' TEXT";
+                    string createSQL = "CREATE TABLE \"" + type + "\" ('id" + type + "' INTEGER PRIMARY KEY AUTOINCREMENT, 'nomProcedure' TEXT, 'systeme' TEXT, 'installation' TEXT";
 
 
 
@@ -95,12 +95,15 @@ namespace Eco
                         int a = cmd.ExecuteNonQuery();
                         int b = cmd2.ExecuteNonQuery();
 
+
                         string pathCopyFT = AppDomain.CurrentDomain.BaseDirectory + "/Doc/FT/"+ System.IO.Path.GetFileName(pathTemplate);
-                        string pathCopyDoc = AppDomain.CurrentDomain.BaseDirectory + "/Doc/Equipement/" + System.IO.Path.GetFileName(pathDoc);
+                        
+                            string pathCopyDoc = AppDomain.CurrentDomain.BaseDirectory + "/Doc/Equipement/" + System.IO.Path.GetFileName(pathDoc);
                         
 
                         File.Copy(pathTemplate, pathCopyFT);
-                        File.Copy(pathDoc, pathCopyDoc);
+                        if (pathDoc != "")
+                            File.Copy(pathDoc, pathCopyDoc);
 
                         MessageBox.Show("Le type d'équipement : " + type + " a été ajouté.");
 

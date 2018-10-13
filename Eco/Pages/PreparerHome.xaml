@@ -10,7 +10,9 @@
    
 
     <DockPanel>
+        
         <Grid DockPanel.Dock="Top" Height="50" >
+            
             <Button Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Left" Height="50" Width="50"  Click="btnRetour" >
                 <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
@@ -19,7 +21,7 @@
                 </Rectangle>
             </Button>
 
-            <Button ToolTip="Fermer l'application" x:Name="button" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose">
+            <Button ToolTip="Fermer l'application" x:Name="button" Style="{DynamicResource MetroCircleButtonStyle}" HorizontalAlignment="Right" Height="50" Width="50"  Click="btnClose" Grid.Column="1">
                 <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_close}" />
@@ -31,39 +33,43 @@
 
         
         <Grid>
-            <Button VerticalAlignment="Top" Margin="-5,0,540,0" Height="256" Name="but_selProj" Width="265" Click="btnSelSys">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="256"/>
+                <ColumnDefinition Width="265"/>
+                <ColumnDefinition Width="265"/>
+                <ColumnDefinition Width="265"/>
+                <ColumnDefinition Width="15*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="256"/>
+                <RowDefinition Height="265"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Button VerticalAlignment="Stretch"  Height="256" Name="but_selProj" Width="265" Grid.Column="2" Grid.Row="1" Click="btnSelSys">
                 <Button.Content>
                     <StackPanel>
                         <TextBlock Text="Sélectionner Systeme " />
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button VerticalAlignment="Top" Margin="265,0,270,0" Height="256" x:Name="but_Affect" Width="265" Click="btnAffecter">
+            <Button VerticalAlignment="Top"  Height="256" x:Name="but_Affect" Width="265" Grid.Column="3" Grid.Row="1" Click="btnAffecter">
                 <StackPanel>
                     <TextBlock Text="Affecter" />
                 </StackPanel>
             </Button>
-            <Button VerticalAlignment="Top" Margin="535,0,0,0" Height="256" x:Name="but_impEqu" Width="265" Click="btnAddEquip">
+            <Button VerticalAlignment="Top"  Height="256" x:Name="but_impEqu" Width="265" Grid.Column="4" Grid.Row="1" Click="btnAddEquip">
                 <StackPanel>
                     <TextBlock Text="Ajouter nouveau type d'équipement" />
                 </StackPanel>
             </Button>
-            <Button VerticalAlignment="Top" Margin="-5,261,540,0" Height="256" x:Name="but_assDoc" Width="265" >
+            <Button VerticalAlignment="Top" Height="256" x:Name="but_newProj" Width="265" Grid.Column="3" Grid.Row="2" Click="btnCreerProjet" >
                 <StackPanel>
-                    <TextBlock Text="Associer Documentation" />
+                    <TextBlock Text="Créer Système" />
                 </StackPanel>
             </Button>
-            <Button VerticalAlignment="Top" Margin="265,261,270,0" Height="256" x:Name="but_gesProj" Width="265" >
-                <StackPanel>
-                    <TextBlock Text="Gestion Procédures" />
-                </StackPanel>
-            </Button>
-            <Button VerticalAlignment="Top" Margin="535,261,0,0" Height="256" x:Name="but_newProj" Width="265" Click="btnCreerProjet" >
-                <StackPanel>
-                    <TextBlock Text="Créer Projet" />
-                </StackPanel>
-            </Button>
-            <Button VerticalAlignment="Top" Margin="555,522,1100,0" Height="256" x:Name="but_Exportdb" Width="265" Click="btnExportDB" >
+            <Button VerticalAlignment="Top"  Height="256" x:Name="but_Exportdb" Width="265" Grid.Column="2" Grid.Row="2" Click="btnExportDB" >
                 <StackPanel>
                     <TextBlock Text="Exporter DB" />
                 </StackPanel>

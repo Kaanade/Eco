@@ -30,8 +30,9 @@ namespace Eco
             SQLiteConnection connection = new SQLiteConnection(conn);
             connection.Open();
 
-            SQLiteCommand cmd = new SQLiteCommand("Select * from FNC WHERE systeme = @systeme", connection);
+            SQLiteCommand cmd = new SQLiteCommand("Select * from FNC WHERE systeme = @systeme AND installation = @installation", connection);
             cmd.Parameters.AddWithValue("@systeme", systeme);
+            cmd.Parameters.AddWithValue("@installation", App.Current.Properties["installation"]);
 
             SQLiteDataReader sdr = cmd.ExecuteReader();
 

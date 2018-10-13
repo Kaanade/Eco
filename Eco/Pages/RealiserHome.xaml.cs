@@ -32,7 +32,9 @@ namespace Eco
                 string conn = "Data Source=EcoDB.db;Version=3";
                 SQLiteConnection connection = new SQLiteConnection(conn);
 
-                SQLiteCommand cmd = new SQLiteCommand("Select nomSysteme from Systeme", connection);
+                SQLiteCommand cmd = new SQLiteCommand("Select nomSysteme from Systeme WHERE installation = @installation", connection);
+                cmd.Parameters.AddWithValue("@installation", App.Current.Properties["installation"]);
+
                 SQLiteDataAdapter adapt = new SQLiteDataAdapter(cmd);
                 DataSet ds = new DataSet();
                 adapt.Fill(ds, "Systemes");

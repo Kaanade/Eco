@@ -43,7 +43,9 @@ namespace Eco
                     App.Current.Properties["niveau"] = Convert.ToInt32(sdrRead["niveau"]);
                 }
                 connection.Close();
-                
+
+                App.Current.Properties["installation"] = "Projet3";
+
                 NavigationFrame.Navigate(new Home());
 
             }
